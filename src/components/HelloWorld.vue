@@ -8,7 +8,7 @@
           href="https://vuejs.org"
           target="_blank"
         >
-          Core Docsfdsfsd 
+          Core Doc
         </a>
       </li>
       <li>
