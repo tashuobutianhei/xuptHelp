@@ -3,7 +3,7 @@
     <Row type="flex" justify="space-between">
       <Col>
         <Avatar style="color: #f56a00;background-color: #fde3cf">U</Avatar>
-        <span class="nickname">假装有一个名字</span>
+        <span class="nickname">{{foodInfo.nickname}}</span>
       </Col>
       <Col>
         <div class="itme">
@@ -14,27 +14,27 @@
     <Row class="conent">
       <Col>
         <p>
-          <span>假装有一个名字 想吃：</span>东区，一楼那家包子6个肉的加一个燕麦粥
+          <span>{{foodInfo.nickname}} 想吃：</span>{{foodInfo.content}}
         </p>
       </Col>
       <Col style="margin-top:5px">
         <div class="value">
                <p>
                 <span class="span">预计金额：</span>
-                ￥{{money}}
+                ￥{{foodInfo.money}}
                 </p>
                 <p>
                 <span>酬劳：</span>
-                ￥{{pay}}
+                ￥{{foodInfo.pay}}
                 </p>
                 <p>
-                <span>预期送达时间：</span>30分钟内
+                <span>预期送达时间：</span>{{foodInfo.time}}
                 </p>
                 <p>
-                <span>收餐地址：</span>东区安悦公寓412
+                <span>收餐地址：</span>{{foodInfo.address}}
                 </p>
                 <p>
-                <span>联系方式：</span>183xxxx0131
+                <span>联系方式：</span>{{transform(foodInfo.tel)}}
                 </p>
         </div>
       </Col>
@@ -42,45 +42,25 @@
     <Row type="flex" justify="end">
       <Col>
         <Button type="primary" class="orderButton" v-if="type=='order' && status==0 " icon="md-flag" @click="getOrder">马上接单</Button>
-        <Button type="warning" class="orderButton" v-if="type=='order' && status==1 " icon="md-alarm" >已完成（快去完成）</Button>
+        
+        <Poptip confirm title="确认收货了吗?" @on-ok="readyOrder" class="orderButton">
+          <Button type="warning" v-if="type=='order' && status==1 " icon="md-alarm" >已完成（快去完成）</Button>
+        </Poptip>
+
         <Button type="primary" class="orderButton" v-if="type=='order' && status==2 " disabled>已完成</Button>
 
         <Poptip confirm title="确认退单吗?" @on-ok="outOrder" class="orderButton">
           <Button type="primary"  v-if="type=='release' && status==0 " icon="md-clock" >待领取</Button>
         </Poptip>
 
-        <Poptip confirm title="确认退单吗?" @on-ok="outOrder" class="orderButton">
-          <Button type="primary" class="orderButton" v-if="type=='release' && status==1 " icon="md-heart" >确认收货</Button>
+        <Poptip confirm title="确认收货了吗?" @on-ok="getMyOrder" class="orderButton">
+          <Button type="primary"  v-if="type=='release' && status==1 " icon="md-heart" >确认收货</Button>
         </Poptip>
 
         <Button type="warning" class="orderButton" v-if="type=='release' && status==2 " icon="md-chatboxes" >评价</Button>
       </Col>
     </Row>
-    <!-- <Row class="comment">
-      <div class="commentItem noneComment">
-        <p>
-          暂时还没有评论
-          <span>写下你的看法吧</span>
-        </p>
-      </div>
-      <div class="commentItem">
-        <Row type="flex" justify="space-between">
-          <Col>
-            <Avatar style="color: #f56a00;background-color: #fde3cf">U</Avatar>
-            <span>假装有一个名字</span>
-          </Col>
-          <Col>
-            <div class="itme">
-              <Time :time="time"/>
-            </div>
-          </Col>
-        </Row>
-        <Row style="padding:5px 20px">
-          <p>假装这是一条评论假装这是一条评论假装这是一条评论假装这是一条评论</p>
-        </Row>
-        <span class="replay">回复</span>
-      </div>
-    </Row> -->
+    
   </div>
 </template>
 <script>
@@ -90,7 +70,7 @@ const status = {
   2:'已完成'
 }
 export default {
-  props:["type","status"],
+  props:["type","status","foodInfo"],
   data() {
     return {
       time: new Date(),
@@ -104,6 +84,19 @@ export default {
     },
     outOrder(){
       this.$Message.success('退单成功');
+    },
+    getMyOrder(){
+      this.$Message.success('收货成功！');
+    },
+    readyOrder(){
+      this.$Message.success('订单完成！');
+    },
+        transform(it) {
+      if (this.status == 0 && this.type !== 'release' ) {
+        return it.replace(/[0-9]/g, "*");
+      } else {
+        return it;
+      }
     }
   }
 };
