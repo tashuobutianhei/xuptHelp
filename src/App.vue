@@ -84,9 +84,4 @@
     text-align: center;
     color: #d7dde4;
 }
-.content{
-  background: white;
-  min-height: 800px;
-  margin: 30px 50px;
-}
 </style>

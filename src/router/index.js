@@ -6,6 +6,7 @@ import Mail from '@/view/Mail.vue'
 import SecondHand from '@/view/SecondHand.vue'
 import Mycenter from  '@/view/Mycenter.vue'
 
+import MycenterBody1 from '@/view/MycenterBody1'
 
 Vue.use(Router)
 
@@ -33,7 +34,14 @@ export default new Router({
     {
       path: '/Mycenter',
       name: 'Mycenter',
-      component: Mycenter
+      component: Mycenter,
+      children:[
+        {
+          path: 'MycenterBody1',
+          name: 'MycenterBody1',
+          component: MycenterBody1,
+        }
+      ]
     }
   ]
 })
