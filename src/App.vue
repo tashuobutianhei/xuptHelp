@@ -2,8 +2,9 @@
 <template>
     <div class="layout">
         <Layout>
-            <Header>
-                <Menu mode="horizontal" theme="dark" :active-name="activeKey">
+            <Header class="menu" >
+                
+                <Menu mode="horizontal" theme="light" :active-name="activeKey" class="menu" >
                     <div class="layout-logo"></div>
                     <div class="layout-nav">
                         <MenuItem name="Home" to="/">
@@ -23,18 +24,22 @@
                             二手交易
                         </MenuItem>
                     </div>
-                    <div class="avatar">
+                   
+                    <div v-if="$store.state.islogin"  class="avatar" >
                         <Avatar style="color: #f56a00;background-color: #fde3cf">U</Avatar>
-                         <Dropdown trigger="click" style="margin-left: 20px">
+                        <Dropdown trigger="click" style="margin-left: 20px">
                                 <a href="javascript:void(0)">
-                                    假装登录了
+                                    {{$store.state.userInfo.nickname}}
                                     <Icon type="ios-arrow-down"></Icon>
                                 </a>
                                 <DropdownMenu slot="list">
                                     <DropdownItem @click.native="toMycenter">个人中心</DropdownItem>
-                                    <DropdownItem>退出登录</DropdownItem>
+                                    <DropdownItem @click.native="outLogin">退出登录</DropdownItem>
                                 </DropdownMenu>
-                          </Dropdown>   
+                        </Dropdown>   
+                    </div> 
+                     <div v-else class="avatar"  style="color: #FFFFFF;" >
+                        <LogOrRegMoal ></LogOrRegMoal>
                     </div>
                 </Menu>
             </Header>
@@ -47,25 +52,46 @@
 </div>
 </template>
 <script>
+    import LogOrRegMoal from './components/LogOrRegModal'
     export default {
         data(){
           return {
-            activeKey:''
+            activeKey:'',
+            pathname:window.location.pathname
           }
+        },
+        components:{
+            LogOrRegMoal
+        },
+        watch:{
+            // pathname(){
+            //     console.log(1111)
+            //          this.activeKey = window.location.pathname.split('/')[1]
+            // }
         },
         methods:{
           toMycenter(){
             this.$router.push('/Mycenter')
+          },
+          outLogin(){
+             this.$store.commit('loginOut')
           }
         },
         mounted(){
-          // console.log()
+          this.$store.commit('login',{
+                    username:'11111',
+                    nickname:'一个昵称',
+
+          })
           this.activeKey = window.location.pathname.split('/')[1]
         }
     }
 </script>
 
 <style scoped>
+.menu{
+    background: white
+}
 .layout{
     border: 1px solid #d7dde4;
     background: #ffffff;
@@ -78,6 +104,8 @@
    margin-right: 20px;
    position: absolute;
    right: 0px;
+   z-index: 10;
+   cursor: pointer;
 }
 .layout-footer-center{
     background-color: rgb(81,90,110);
