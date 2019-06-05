@@ -7,6 +7,7 @@ import SecondHand from '@/view/SecondHand.vue'
 import Mycenter from  '@/view/Mycenter.vue'
 
 import MycenterBody1 from '@/view/MycenterBody1'
+import MycenterBody2 from '@/view/MycenterBody2'
 
 Vue.use(Router)
 
@@ -40,7 +41,12 @@ export default new Router({
           path: 'MycenterBody1',
           name: 'MycenterBody1',
           component: MycenterBody1,
-        }
+        },
+        {
+          path: 'MycenterBody2',
+          name: 'MycenterBody2',
+          component: MycenterBody2,
+        },
       ]
     }
   ]
