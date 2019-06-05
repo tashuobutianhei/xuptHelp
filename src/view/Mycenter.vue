@@ -1,25 +1,17 @@
 <template>
   <div class="content">
     <Layout>
-        <Sider>
-            <Menu active-name="1-2" :open-names="['1']" class="menu">
-            <Submenu name="1">
-                <template slot="title">
-                <Icon type="ios-analytics"/>Navigation One
-                </template>
-
-                <MenuItem name="1-1">Option 1</MenuItem>
-                <MenuItem name="1-2">Option 2</MenuItem>
-
-                <MenuItem name="1-3">Option 3</MenuItem>
-                <MenuItem name="1-4">Option 4</MenuItem>
-            </Submenu>
-            </Menu>
-        </Sider>
-        <Content>
-            <router-view></router-view>
-        </Content>
-    
+      <Sider>
+        <Menu active-name="1-2" :open-names="['1']" class="menu" style="width:200px">
+          <MenuItem name="1-1" to="/Mycenter/MycenterBody1">个人信息</MenuItem>
+          <MenuItem name="1-2" to="/Mycenter/MycenterBody2">我的任务</MenuItem>
+          <MenuItem name="1-3">Option 3</MenuItem>
+          <MenuItem name="1-4">Option 4</MenuItem>
+        </Menu>
+      </Sider>
+      <Content>
+        <router-view></router-view>
+      </Content>
     </Layout>
   </div>
 </template>

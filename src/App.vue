@@ -100,7 +100,7 @@
 }
 .layout{
     border: 1px solid #d7dde4;
-    /* background: #9099a2; */
+    background: #ffffff;
     position: relative;
     border-radius: 4px;
     overflow: hidden;
