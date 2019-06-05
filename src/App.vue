@@ -90,25 +90,37 @@
 
 <style scoped>
 .menu{
-    background: white
+    background: black;
+    width: 100%;
+    position: fixed;
+    z-index: 150;
+}
+.ivu-menu-item{
+    color: white !important;
 }
 .layout{
     border: 1px solid #d7dde4;
-    background: #f5f7f9;
+    /* background: #9099a2; */
     position: relative;
     border-radius: 4px;
     overflow: hidden;
+
+}
+.content{
+    /* background-color: b */
+    margin-top: 50px;
+    background-color: white;
 }
 .avatar{
    margin: 0 auto;
-   margin-right: 20px;
+   margin-right: 80px;
    position: absolute;
    right: 0px;
    z-index: 10;
    cursor: pointer;
 }
 .layout-footer-center{
-    background-color: rgb(81,90,110);
+    background-color: rgb(0,0,0);
     text-align: center;
     color: #d7dde4;
 }

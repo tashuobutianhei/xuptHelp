@@ -75,5 +75,50 @@ export default {
             address: "东区安悦公寓412",
             tel: '18392120131'
         }
-    ]
+    ],
+    secondHandTask:{
+        secondHandTaskList:[
+            {
+                nickname: '假装有一个名字',
+                username: 'tahsuobutianhei',
+                content: "毕业啦！课本出售毕业啦！课本出售毕业啦！课本出售毕业啦！课本出售毕业啦！课本出售毕业啦！课本出售毕业啦！课本出售",
+                old_price: "240",
+                new_price: "100",
+                address: "东区安悦公寓412",
+                img:'',
+                title:'毕业啦！课本出售',
+                tel: '18392120131'
+            },{
+                nickname: '假装有一个名字',
+                username: 'tahsuobutianhei',
+                content: "毕业啦！课本出售毕业啦！课本出售毕业啦！课本出售毕业啦！课本出售毕业啦！课本出售毕业啦！课本出售毕业啦！课本出售",
+                old_price: "240",
+                new_price: "100",
+                address: "东区安悦公寓412",
+                img:'',
+                title:'毕业啦！课本出售',
+                tel: '18392120131'
+            },{
+                nickname: '假装有一个名字',
+                username: 'tahsuobutianhei',
+                content: "毕业啦！课本出售毕业啦！课本出售毕业啦！课本出售毕业啦！课本出售毕业啦！课本出售毕业啦！课本出售毕业啦！课本出售",
+                old_price: "240",
+                new_price: "100",
+                address: "东区安悦公寓412",
+                img:'',
+                title:'毕业啦！课本出售',
+                tel: '18392120131'
+            },{
+                nickname: '假装有一个名字',
+                username: 'tahsuobutianhei',
+                content: "毕业啦！课本出售毕业啦！课本出售毕业啦！课本出售毕业啦！课本出售毕业啦！课本出售毕业啦！课本出售毕业啦！课本出售",
+                old_price: "240",
+                new_price: "100",
+                address: "东区安悦公寓412",
+                img:'',
+                title:'毕业啦！课本出售',
+                tel: '18392120131'
+            }
+        ]
+    }
 }
