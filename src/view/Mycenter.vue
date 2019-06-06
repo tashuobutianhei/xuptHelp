@@ -25,4 +25,7 @@ export default {};
 .menu {
   min-height: 600px;
 }
+.content {
+  margin-top: -20px;
+}
 </style>
