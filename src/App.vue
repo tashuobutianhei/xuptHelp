@@ -93,7 +93,7 @@
     background: black;
     width: 100%;
     position: fixed;
-    z-index: 150;
+    z-index: 1000;
 }
 .ivu-menu-item{
     color: white !important;
@@ -124,4 +124,8 @@
     text-align: center;
     color: #d7dde4;
 }
+
+
+
+
 </style>

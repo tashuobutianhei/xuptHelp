@@ -22,7 +22,7 @@
               :foodInfo="item"
               class="mytask"
               type="release"
-              status="0"
+              :status="index"
             ></FoodTask>
             <!-- <FoodTask class="mytask" type="release" status="1"></FoodTask>
             <FoodTask class="mytask" type="release" status="2"></FoodTask>-->
@@ -36,7 +36,7 @@
               :foodInfo="item"
               class="mytask"
               type="order"
-              status="1"
+              :status="index"
             ></FoodTask>
             <!-- <FoodTask class="mytask" type="order" status="2"></FoodTask> -->
           </Col>

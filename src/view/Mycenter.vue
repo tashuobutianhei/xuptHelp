@@ -25,4 +25,7 @@ export default {};
 .menu {
   background-color: white;
 }
+.content {
+  margin-top: -20px;
+}
 </style>

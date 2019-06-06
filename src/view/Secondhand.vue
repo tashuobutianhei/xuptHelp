@@ -85,7 +85,7 @@
       <Button type="success" shape="circle" icon="md-clipboard" @click="wirteComment"></Button>
     </Tooltip>
 
-    <MailOrderModal :modalVisble="modalVisble" @close="close"></MailOrderModal>
+    <SecondhandModal :modalVisble="modalVisble" @close="close"></SecondhandModal>
 
     <Modal v-model="readyModalVisble" title="确认一下" @on-ok="getOrderOk" @on-cancel="getOrderCancel">
       <p>确认领取了吗？要负责哦！</p>
@@ -97,6 +97,7 @@ import SecondHandTask from "../components/SecondHandTask";
 import MailTask from "../components/MailTask";
 import MailOrderModal from "../components/MailOrderModal";
 import Comment from "../components/Comment";
+import SecondhandModal from '../components/SecondhandModal'
 
 import CONST from "../common/index.js";
 
@@ -105,7 +106,8 @@ export default {
     SecondHandTask,
     MailTask,
     MailOrderModal,
-    Comment
+    Comment,
+    SecondhandModal
   },
   data() {
     return {
