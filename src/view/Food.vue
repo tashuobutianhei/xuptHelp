@@ -54,6 +54,10 @@
       <Button type="success" shape="circle" icon="md-clipboard" @click="wirteComment"></Button>
     </Tooltip>
 
+    <Tooltip content="刷新" placement="top" class="refishbutton">
+      <Button type shape="circle" icon="md-refresh" @click="refresh"></Button>
+    </Tooltip>
+
     <FoodOrderModal :modalVisble="modalVisble" @close="close"></FoodOrderModal>
 
     <Modal v-model="readyModalVisble" title="确认一下" @on-ok="getOrderOk" @on-cancel="getOrderCancel">
@@ -84,6 +88,14 @@ export default {
     };
   },
   methods: {
+    refresh(){
+      this.axios({
+        method:'get',
+        params:{
+
+        },
+      }).then()
+    },
     close() {
       this.modalVisble = false;
     },
@@ -131,6 +143,11 @@ export default {
   right: 50px;
 }
 .writebutton {
+  position: fixed;
+  top: 200px;
+  right: 50px;
+}
+.refishbutton {
   position: fixed;
   top: 150px;
   right: 50px;

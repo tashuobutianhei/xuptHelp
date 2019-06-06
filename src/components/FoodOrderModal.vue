@@ -1,6 +1,12 @@
 <template>
   <div>
-     <Modal v-model="modalVisble" title="订单信息" @on-ok="ok" @on-cancel="cancel">
+    <Modal
+      v-model="modalVisble"
+      title="订单信息"
+      @on-ok="ok"
+      @on-cancel="cancel"
+      :loading="loginloading"
+    >
       <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
         <FormItem label="地址" prop="address">
           <Input v-model="formValidate.address" placeholder="地址"></Input>
@@ -9,13 +15,13 @@
           <Input v-model="formValidate.tel" placeholder="电话走一波"></Input>
         </FormItem>
         <FormItem label="支付酬劳" prop="pay">
-            <InputNumber v-model="formValidate.pay"  :max="numberMax" :min="numberMin"></InputNumber>
+          <InputNumber v-model="formValidate.pay" :max="numberMax" :min="numberMin"></InputNumber>
         </FormItem>
         <FormItem label="预估价格" prop="money">
-            <InputNumber v-model="formValidate.money" ></InputNumber>
+          <InputNumber v-model="formValidate.money"></InputNumber>
         </FormItem>
         <FormItem label="送达时间" prop="time">
-            <TimePicker  v-model="formValidate.time" format="HH:mm" placeholder="能接受多久送达" ></TimePicker>
+          <TimePicker v-model="formValidate.time" format="HH:mm" placeholder="能接受多久送达"></TimePicker>
         </FormItem>
         <FormItem label="吃啥" prop="food">
           <Input
@@ -31,18 +37,19 @@
 </template>
 <script>
 export default {
-  props:['modalVisble'],
+  props: ["modalVisble"],
   data() {
     return {
-      numberMax:10,
-      numberMin:2,
+      loginloading: true,
+      numberMax: 10,
+      numberMin: 2,
       formValidate: {
         address: "",
         tel: "",
-        pay:0,
+        pay: 2,
         money: 0,
-        time:"",
-        food: "",
+        time: "",
+        food: ""
       },
       ruleValidate: {
         address: [
@@ -57,19 +64,16 @@ export default {
             required: true,
             message: "联系方式",
             trigger: "blur"
-          },
-          { type: "email", message: "Incorrect email format", trigger: "blur" }
-        ],
-        pay: [
-          {
-            required: true,
-            message: "你要支付多少呀",
-            trigger: "change"
           }
         ],
-        money: [
-          { required: true, message: "给个参考吧", trigger: "change" }
-        ],
+        // pay: [
+        //   {
+        //     required: true,
+        //     message: "你要支付多少呀",
+        //     trigger: "blur"
+        //   }
+        // ],
+        // money: [{ required: true, message: "给个参考吧", trigger: "blur" }],
         food: [
           {
             required: true,
@@ -89,12 +93,44 @@ export default {
     };
   },
   methods: {
+    transform(time) {
+      let date = new Date();
+      date.setHours(0);
+      date.setMinutes(0);
+      date.setSeconds(0);
+      date.setMilliseconds(0);
+      let timestep =
+        1000 * 1 * 60 * Number(time.split(":")[1]) +
+        1000 * 1 * 60 * 60 * Number(time.split(":")[0]);
+      return date.getTime() + timestep;
+    },
     handleSubmit(name) {
       this.$refs[name].validate(valid => {
+        this.transform(this.formValidate.time);
         if (valid) {
-          this.$Message.success("Success!");
+          if (this.$store.state.islogin) {
+            this.axios({
+              method: "post",
+              url: "http://192.168.43.138:9000/food/",
+              data: {
+                address: this.formValidate.address,
+                phone: this.formValidate.tel,
+                pay: this.formValidate.pay,
+                const: this.formValidate.money,
+                description: this.formValidate.food,
+                time: this.transform(this.formValidate.time)
+              }
+            }).then(res => {
+              if (res.data == "success") {
+                this.$Message.success("添加成功!");
+                this.$emit("close");
+              }
+            });
+          } else {
+            this.$Message.error("先登录吧!");
+          }
         } else {
-          this.$Message.error("Fail!");
+          this.$Message.error("存在错误信息o!");
         }
       });
     },
@@ -102,11 +138,12 @@ export default {
       this.$refs[name].resetFields();
     },
     ok() {
-      this.$emit('close')
+      //this.$emit('close')
+      this.handleSubmit("formValidate");
       this.$Message.info("Clicked ok");
     },
     cancel() {
-      this.$emit('close')
+      this.$emit("close");
       this.$Message.info("Clicked cancel");
     }
   }

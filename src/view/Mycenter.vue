@@ -26,6 +26,6 @@ export default {};
   min-height: 600px;
 }
 .content {
-  margin-top: -20px;
+  margin-top: 10px;
 }
 </style>

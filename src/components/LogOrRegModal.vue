@@ -46,6 +46,10 @@
   </div>
 </template>
 <script>
+import axios from "axios";
+axios.defaults.withCredentials = true; //配置为true
+import Tool from '../common/tool.js'
+
 export default {
   data() {
     const validatePass = (rule, value, callback) => {
@@ -54,7 +58,7 @@ export default {
       } else {
         if (this.formReg.password !== "") {
           // 对第二个密码框单独验证
-          this.$refs.formReg.validateField("passwdCheck");
+          this.$refs.formReg.validateField("passwordAgain");
         }
         callback();
       }
@@ -136,8 +140,31 @@ export default {
     regok() {
       this.$refs["formReg"].validate(valid => {
         if (valid) {
-          this.$Message.success("注册成功!");
-          this.$refs["formReg"].resetFields();
+          let formData = new FormData();
+          formData.append("username", this.formReg.username);
+          formData.append("password", this.formReg.password);
+
+          this.axios({
+            method: "post",
+            url: "http://192.168.43.138:9000/admin/register",
+            headers: { "Content-Type": "multipart/form-data" },
+            data: formData
+          })
+            .then(res => {
+              // console.log(res.data);
+              if (res.data == "success") {
+                this.$Message.success("注册成功!");
+                this.$refs["formReg"].resetFields();
+              } else {
+                this.$Message.error("注册失败，稍后重试!");
+              }
+              // if (res.data.status == "success") {
+
+              // }
+            })
+            .catch(err => {
+              console.log(err);
+            });
         } else {
           this.$Message.error("信息填完哦!");
         }
@@ -146,17 +173,40 @@ export default {
     loginok() {
       this.$refs["formLogin"].validate(valid => {
         if (valid) {
-          this.$Message.success("登录成功!");
-          this.$store.commit("login", {
-            username: "11111",
-            nickname: "一个昵称"
-          });
-          this.$refs["formLogin"].resetFields();
+          let formData = new FormData();
+          formData.append("username", this.formLogin.username);
+          formData.append("password", this.formLogin.password);
+
+          this.axios({
+            method: "post",
+            url: "http://192.168.43.138:9000/admin/login",
+            headers: { "Content-Type": "multipart/form-data" },
+            data: formData
+          })
+            .then(res => {
+              console.log(res);
+
+              Tool.setCookie('token',res.data);
+              Tool.setCookie('username',this.formLogin.username);
+
+              this.$Message.success("登录成功!");
+
+              this.$store.commit("login", {
+                username: this.formLogin.username,
+                nickname: "1111"
+              });
+
+              this.$refs["formLogin"].resetFields();
+            })
+            .catch(err => {
+              console.log(err);
+            });
         } else {
           this.$Message.error("存在错误信息!");
         }
       });
     },
+
     goToReg() {
       this.loginVisble = false;
       this.regVisble = true;
