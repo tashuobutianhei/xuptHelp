@@ -1,46 +1,85 @@
 <template>
   <div class="content">
-    <Card :bordered="true" :padding="16">
+    <Card :bordered="true" :padding="14">
       <p slot="title">用户名</p>
-      <p style="margin-left:50px; margin-right:135px">dalao</p>
-    </Card>
-    <Card :bordered="true" :padding-top="20">
-      <p slot="title">个人头像</p>
-      <div style="display: flex">
-        <div class="face">
-          <img src alt="个人头像">
+      <div style="display:flex">
+        <div class="cardcontent">
+          <p>dalao</p>
         </div>
-        <Button type="primary" style="margin:auto">修改头像</Button>
       </div>
     </Card>
 
-    <Card :bordered="true" :padding="30">
-      <p>Content of no border type. Content of no border type. Content of no border type. Content of no border type.</p>
+    <Card :bordered="true" :padding="14">
+      <p slot="title">个人头像</p>
+      <div style="display: flex;">
+        <div class="cardcontent" style="height:70px; background-color: pink;width:500px">
+          <img src alt="个人头像" style="background-color: gold;">
+        </div>
+        <div style="margin:auto">
+          <Upload action="//jsonplaceholder.typicode.com/posts/">
+            <Button class="btn" type="primary" icon="ios-cloud-upload-outline">修改头像</Button>
+          </Upload>
+        </div>
+      </div>
     </Card>
-    <Card :bordered="true" :padding="30">
-      <p>Content of no border type. Content of no border type. Content of no border type. Content of no border type.</p>
-    </Card>
-    <Card :bordered="true" :padding="30">
-      <p>Content of no border type. Content of no border type. Content of no border type. Content of no border type.</p>
-    </Card>
+
+    <mycard :info="nickname"></mycard>
+    <mycard :info="mail"></mycard>
+    <mycard :info="info"></mycard>
   </div>
 </template>
+
+
 <script>
-export default {};
+import mycard from "../components/card";
+export default {
+  components: {
+    mycard
+  },
+  data() {
+    return {
+      info: {
+        name: "手机号码",
+        value: "12345679",
+        do: "更改号码"
+      },
+      mail: {
+        name: "邮箱地址",
+        value: "132132131@qq.com",
+        do: "修改地址"
+      },
+      nickname: {
+        name: "昵称",
+        value: "大佬",
+        do: "修改昵称"
+      },
+      flag: false
+    };
+  }
+};
 </script>
-<style>
+
+
+<style scoped>
 .content {
   margin-left: 1px;
-  height: 100%;
   background-color: #fff;
 }
-
-.face {
-  height: 70px;
-  width: 70px;
+.cardcontent {
+  width: 150px;
   margin-left: 50px;
-  margin-right: 100px;
-  background-color: gold;
+  line-height: 31.41px;
+}
+.btn {
+  margin: auto;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
 
