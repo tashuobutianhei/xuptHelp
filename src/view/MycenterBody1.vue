@@ -1,6 +1,6 @@
 <template>
-  <div class="content">
-    <Card :bordered="true" :padding="14">
+  <div class="bodycontent">
+    <Card :bordered="false" :padding="16">
       <p slot="title">用户名</p>
       <div style="display:flex">
         <div class="cardcontent">
@@ -9,7 +9,7 @@
       </div>
     </Card>
 
-    <Card :bordered="true" :padding="14">
+    <Card :bordered="false" :padding="16">
       <p slot="title">个人头像</p>
       <div style="display: flex;">
         <div class="cardcontent" style="height:70px; background-color: pink;width:500px">
@@ -31,7 +31,7 @@
 
 
 <script>
-import mycard from "../components/card";
+import mycard from "../components/UserInfoCard";
 export default {
   components: {
     mycard
@@ -55,14 +55,26 @@ export default {
       },
       flag: false
     };
+  },
+  created(){
+    this.axios({
+      method:'get',
+      url:'',
+      params:{
+    
+      }
+    }).then(res => {
+
+    }).catch(err => {]
+      
+    })
   }
 };
 </script>
 
 
 <style scoped>
-.content {
-  margin-left: 1px;
+.bodycontent {
   background-color: #fff;
 }
 .cardcontent {

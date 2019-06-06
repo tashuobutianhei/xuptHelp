@@ -1,5 +1,5 @@
 <template>
-    <Card :bordered="true" :padding="14">
+    <Card :bordered="false" :padding="16" style="margin-top:5px">
       <p slot="title">{{info.name}}</p>
       <div style="display:flex">
         <div class="cardcontent">
