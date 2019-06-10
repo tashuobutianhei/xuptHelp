@@ -3,12 +3,12 @@
     <Tabs :value="TabsValue" class="content">
       <TabPane label="待领取订单" name="wait">
         <FoodTask
-          v-for="(item,index) in foodList"
-          :key="index"
+          v-for="(item) in foodTaskList"
+          :key="item.taskId"
           :foodInfo="item"
           class="task"
           type="order"
-          status="0"
+          :status="item.status"
           @getOrder="getOrder"
         ></FoodTask>
       </TabPane>
@@ -17,12 +17,12 @@
           <Col span="12" class="myeat">
             <P>我发布的</P>
             <FoodTask
-              v-for="(item,index) in foodList"
-              :key="index"
+              v-for="(item) in foodTaskSelfList"
+              :key="item.taskId"
               :foodInfo="item"
               class="mytask"
               type="release"
-              :status="index"
+              :status="item.status"
             ></FoodTask>
             <!-- <FoodTask class="mytask" type="release" status="1"></FoodTask>
             <FoodTask class="mytask" type="release" status="2"></FoodTask>-->
@@ -30,13 +30,12 @@
           <Col span="12" class="myget">
             <P>我的领取</P>
             <FoodTask
-              v-for="(item,index) in foodList"
-              v-if="index != 0"
-              :key="index"
+              v-for="(item) in foodTaskOrderList"
+              :key="item.taskId"
               :foodInfo="item"
               class="mytask"
               type="order"
-              :status="index"
+              :status="item.status"
             ></FoodTask>
             <!-- <FoodTask class="mytask" type="order" status="2"></FoodTask> -->
           </Col>
@@ -55,7 +54,7 @@
     </Tooltip>
 
     <Tooltip content="刷新" placement="top" class="refishbutton">
-      <Button type shape="circle" icon="md-refresh" @click="refresh"></Button>
+      <Button shape="circle" icon="md-refresh" @click="refresh"></Button>
     </Tooltip>
 
     <FoodOrderModal :modalVisble="modalVisble" @close="close"></FoodOrderModal>
@@ -79,33 +78,71 @@ export default {
     Comment
   },
   data() {
-    return {
+    return { 
+      foodTaskList: [], //待领取
+      foodTaskSelfList:[],  //发布
+      foodTaskOrderList:[],  //领取
       modalVisble: false,
       TabsValue: "wait",
       readyModalVisble: false,
       wirteVisble: false,
-      foodList: CONST.foodTask.taskList
+      foodList: CONST.foodTask.taskList,
+      itId: ""
     };
   },
   methods: {
-    refresh(){
+    refresh() {
       this.axios({
-        method:'get',
-        params:{
-
-        },
-      }).then()
+        method: "get",
+        url: "http://192.168.43.138:9000/task/status"
+      })
+        .then(res => {
+          this.foodTaskList = res.data.filter((item, index, array) => {
+            return item.type == "food";
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    refreshName() {
+      this.axios({
+        method: "get",
+        url: "http://192.168.43.138:9000/task/name"
+      })
+        .then(res => {
+          console.log()
+          this.foodTaskSelfList = res.data.filter((item, index, array) => {
+            return item.type == "food" && item.pubUser == this.$store.state.userInfo.username;
+          });
+          this.foodTaskOrderList = res.data.filter((item, index, array) => {
+            return item.type == "food" && item.subUser == this.$store.state.userInfo.username;
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     close() {
       this.modalVisble = false;
     },
-    getOrder() {
+    getOrder(it) {
+      this.itId = it.id;
       this.readyModalVisble = true;
     },
     getOrderOk() {
       //axios 订单领取
-      this.$Message.success("领取成功");
-      this.readyModalVisble = false;
+      this.axios({
+        method: "put",
+        url: `http://192.168.43.138:9000/task/${this.itId}`
+      }).then(res => {
+        console.log(res);
+        if (res == "success") {
+          this.refresh();
+          this.$Message.success("领取成功");
+          this.readyModalVisble = false;
+        }
+      });
     },
     getOrderCancel() {
       this.readyModalVisble = false;
@@ -117,6 +154,10 @@ export default {
     changewirteVisble() {
       this.wirteVisble = false;
     }
+  },
+  created() {
+    this.refresh();
+    this.refreshName();
   }
 };
 </script>

@@ -3,7 +3,7 @@
     <Row type="flex" justify="space-between">
       <Col>
         <Avatar style="color: #f56a00;background-color: #fde3cf">L</Avatar>
-        <span class="nickname">{{mailInfo.nickname}}</span>
+        <span class="nickname">{{mailInfo.pubUser}}</span>
       </Col>
       <Col>
         <div class="itme">
@@ -14,7 +14,7 @@
     <Row class="conent">
       <Col>
         <p>
-          <span>{{mailInfo.nickname}} 的快递：</span>
+          <span>{{mailInfo.pubUser}} 的快递：</span>
           {{transform(mailInfo.content)}}
         </p>
       </Col>
@@ -30,7 +30,7 @@
           </p>
           <p>
             <span>预期送达时间：</span>
-            {{mailInfo.time}}
+            {{`${new Date(mailInfo.time).getHours()}:${new Date(mailInfo.time).getMinutes()}`}}
           </p>
           <p>
             <span>收货地址：</span>
@@ -38,7 +38,7 @@
           </p>
           <p>
             <span>联系方式：</span>
-            {{transform(mailInfo.tel)}}
+            {{transform(mailInfo.phone)}}
           </p>
         </div>
       </Col>
@@ -92,15 +92,15 @@ export default {
       pay: 2
     };
   },
-//   computed: {
-//     mailContent() {
-//       if (this.status == 0) {
-//         return this.mailInfo.content.replace(/[0-9]/g, "*");
-//       } else {
-//         return this.mailInfo.content;
-//       }
-//     }
-//   },
+  //   computed: {
+  //     mailContent() {
+  //       if (this.status == 0) {
+  //         return this.mailInfo.content.replace(/[0-9]/g, "*");
+  //       } else {
+  //         return this.mailInfo.content;
+  //       }
+  //     }
+  //   },
   methods: {
     getOrder() {
       this.$emit("getOrder", {});
@@ -115,7 +115,7 @@ export default {
       this.$Message.success("订单完成！");
     },
     transform(it) {
-      if (this.status == 0 && this.type !== 'release' ) {
+      if (this.status == 0 && this.type !== "release") {
         return it.replace(/[0-9]/g, "*");
       } else {
         return it;
