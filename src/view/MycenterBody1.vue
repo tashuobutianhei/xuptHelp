@@ -1,46 +1,150 @@
 <template>
-  <div class="content">
-    <Card :bordered="true" :padding="16">
+  <div class="bodycontent">
+    <Card shadow :bordered="false" :padding="16" style="margin-top:5px">
       <p slot="title">用户名</p>
-      <p style="margin-left:50px; margin-right:135px">dalao</p>
-    </Card>
-    <Card :bordered="true" :padding-top="20">
-      <p slot="title">个人头像</p>
-      <div style="display: flex">
-        <div class="face">
-          <img src alt="个人头像">
+      <div style="display:flex">
+        <div class="cardcontent">
+          <p>{{userInfo.userName}}</p>
         </div>
-        <Button type="primary" style="margin:auto">修改头像</Button>
       </div>
     </Card>
 
-    <Card :bordered="true" :padding="30">
-      <p>Content of no border type. Content of no border type. Content of no border type. Content of no border type.</p>
+    <Card shadow :bordered="false" :padding="16" style="margin-top:5px">
+      <p slot="title">个人昵称</p>
+      <div style="display:flex">
+        <div class="cardcontent">
+          <p>{{userInfo.nickName}}</p>
+        </div>
+        <div style="width: 300px; margin-left:50px; height:32px">
+          <Input v-model="nickName" placeholder="输入要修改的昵称" style="width: 300px;"/>
+        </div>
+        <Poptip class="btn" confirm title="你确定修改吗？" @on-ok="updateNickname" @on-cancel="cancel">
+          <Button type="primary">修改昵称</Button>
+        </Poptip>
+      </div>
     </Card>
-    <Card :bordered="true" :padding="30">
-      <p>Content of no border type. Content of no border type. Content of no border type. Content of no border type.</p>
+
+    <Card shadow :bordered="false" :padding="16" style="margin-top:5px">
+      <p slot="title">个人头像</p>
+      <div style="display: flex;">
+        <div class="cardcontent" style="height:70px; background-color: pink;width:500px">
+          <img src alt="个人头像" style="background-color: gold;">
+        </div>
+        <div style="margin:auto">
+          <Upload action="//jsonplaceholder.typicode.com/posts/">
+            <Button class="btn" type="primary" icon="ios-cloud-upload-outline">修改头像</Button>
+          </Upload>
+        </div>
+      </div>
     </Card>
-    <Card :bordered="true" :padding="30">
-      <p>Content of no border type. Content of no border type. Content of no border type. Content of no border type.</p>
+
+    <Card shadow :bordered="false" :padding="16" style="margin-top:5px">
+      <p slot="title">手机号码</p>
+      <div style="display:flex">
+        <div class="cardcontent">
+          <p>{{userInfo.phoneNumber}}</p>
+        </div>
+        <div style="width: 300px; margin-left:50px; height:32px">
+          <Input v-model="phoneNumber" placeholder="输入要修改的号码" style="width: 300px"/>
+        </div>
+        <Poptip class="btn" confirm title="你确定修改吗？" @on-ok="updatePhonenumber" @on-cancel="cancel">
+          <Button type="primary">修改号码</Button>
+        </Poptip>
+      </div>
+    </Card>
+
+    <Card shadow :bordered="false" :padding="16" style="margin-top:5px">
+      <p slot="title">邮箱地址</p>
+      <div style="display:flex">
+        <div class="cardcontent">
+          <p>{{userInfo.email}}</p>
+        </div>
+        <div style="width: 300px; margin-left:50px; height:32px">
+          <Input v-model="email" placeholder="输入要修改邮箱地址" style="width: 300px"/>
+        </div>
+        <Poptip class="btn" confirm title="你确定修改吗？" @on-ok="updateEmail" @on-cancel="cancel">
+          <Button type="primary">修改邮箱</Button>
+        </Poptip>
+      </div>
     </Card>
   </div>
 </template>
-<script>
-export default {};
-</script>
-<style>
-.content {
-  margin-left: 1px;
-  height: 100%;
-  background-color: #fff;
-}
 
-.face {
-  height: 70px;
-  width: 70px;
+
+<script>
+export default {
+  data() {
+    return {
+      userName: "",
+      nickName: "",
+      phoneNumber: "",
+      email: "",
+      myicon: "",
+      userInfo: {
+        userName: "dalao",
+        nickName: "大佬",
+        myicon: "",
+        phoneNumber: "13213213213",
+        email: "1321321231@qq.com"
+      }
+    };
+  },
+
+  methods: {
+    uploadChange() {
+      return 1;
+    },
+    updateNickname() {
+      this.userInfo.nickName = this.nickName;
+      if (this.uploadChange()) {
+        this.$Message.info("修改成功");
+      }
+    },
+    updatePhonenumber() {
+      this.userInfo.phoneNumber = this.phoneNumber;
+      if (this.uploadChange()) {
+        this.$Message.info("修改成功");
+      }
+    },
+    updateEmail() {
+      this.userInfo.email = this.email;
+    },
+    updatemyicon() {},
+    cancel() {
+      this.$Message.info("你取消了操作");
+      if (this.uploadChange()) {
+        this.$Message.info("修改成功");
+      }
+    }
+  },
+
+  created() {
+    this.axios({
+      method: "get",
+      url: "http://192.168.43.138:9000/user/",
+      params: {}
+    })
+      .then(res => {})
+      .catch(err => {
+        [];
+      });
+  }
+};
+</script>
+
+
+<style scoped>
+.bodycontent {
+  background-color: #fff;
+  margin-left: 1px;
+}
+.cardcontent {
+  width: 150px;
   margin-left: 50px;
-  margin-right: 100px;
-  background-color: gold;
+  line-height: 31.41px;
+}
+.btn {
+  margin: auto;
 }
 </style>
 
