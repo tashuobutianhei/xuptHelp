@@ -24,14 +24,18 @@
           </div>
         </Col>
         <Col span="11" class="adiv">
-          <p class="title">校园外卖(19条待领取)</p>
+          <p class="title">校园外卖({{foodList.length}}条待领取)</p>
+          <div v-if="foodList.length==0" class="no">
+            <img src="../assets/img/no.png">
+            <p>还没有人发布哦</p>
+          </div>
           <FoodTask
-            v-for="(item,index) in foodList"
-            :key="index"
+            v-for="item in foodList"
+            :key="item.taskId"
             :foodInfo="item"
             class="task"
             type="order"
-            status="0"
+            :status="item.status"
             @getOrder="getOrder"
           ></FoodTask>
           <p class="foot" @click="goto('Food')">
@@ -40,13 +44,17 @@
           </p>
         </Col>
         <Col span="11" class="adiv">
-          <p class="title">快递代取(12条待领取)</p>
+          <p class="title">快递代取({{mailList.length}}条待领取)</p>
+          <div v-if="mailList.length==0" class="no">
+            <img src="../assets/img/no.png">
+            <p>还没有人发布哦</p>
+          </div>
           <MailTask
-            v-for="(item,index) in mailList"
-            :key="index"
+            v-for="item in mailList"
+            :key="item.taskId"
             class="task"
             type="order"
-            status="0"
+            :status="item.status"
             @getOrder="getOrder"
             :mailInfo="item"
           ></MailTask>
@@ -76,7 +84,16 @@
           </div>
         </Col>
         <Col span="24" class="adiv">
-          <p class="title">二手交易(120件物品)</p>
+          <p class="title">二手交易({{handList.length}}件物品)</p>
+          <MailTask
+            v-for="item in mailList"
+            :key="item.taskId"
+            class="task"
+            type="order"
+            :status="item.status"
+            @getOrder="getOrder"
+            :mailInfo="item"
+          ></MailTask>
           <p class="foot">
             查看全部
             <Icon type="ios-arrow-down"/>
@@ -90,15 +107,21 @@
     <Tooltip content="有要取的快递吗？" placement="top" class="addbutton_mail">
       <Button type="success" shape="circle" icon="md-send" @click="mailmodalVisble=true"></Button>
     </Tooltip>
+    <Tooltip content="闲置物品有吗" placement="top" class="addbutton_hand">
+      <Button type="warning" shape="circle" icon="logo-usd" @click="handmodalVisble=true"></Button>
+    </Tooltip>
     <FoodOrderModal :modalVisble="foodmodalVisble" @close="foodclose"></FoodOrderModal>
     <MailOrderModal :modalVisble="mailmodalVisble" @close="emailclose"></MailOrderModal>
-  </div>
+    <HandOrderModal :modalVisble="handmodalVisble" @close="handClose"></HandOrderModal>
+   </div>
 </template>
 <script>
 import FoodTask from "../components/FoodTask";
 import MailTask from "../components/MailTask";
+import HandTask from "../components/SecondHandTask";
 import FoodOrderModal from "../components/FoodOrderModal";
 import MailOrderModal from "../components/MailOrderModal";
+import HandOrderModal from "../components/SecondhandModal";
 
 import CONST from "../common/index";
 
@@ -106,15 +129,19 @@ export default {
   components: {
     FoodTask,
     MailTask,
+    HandTask,
     FoodOrderModal,
-    MailOrderModal
+    MailOrderModal,
+    HandOrderModal
   },
   data() {
     return {
-      mailList: CONST.mailTask,
-      foodList: CONST.foodTask.taskList,
+      mailList: [],
+      foodList: [],
+      handList: [],
       foodmodalVisble: false,
-      mailmodalVisble: false
+      mailmodalVisble: false,
+      handmodalVisble: false
     };
   },
   methods: {
@@ -129,7 +156,57 @@ export default {
     },
     emailclose() {
       this.mailmodalVisble = false;
+    },
+    handClose() {
+      this.handmodalVisble = false;
+    },
+    refreshFood() {
+      this.axios({
+        method: "get",
+        url: "http://192.168.43.138:9000/task/status"
+      })
+        .then(res => {
+          this.FoodTask = res.data.filter((item, index, array) => {
+            return item.type == "food";
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    refreshMail() {
+      this.axios({
+        method: "get",
+        url: "http://192.168.43.138:9000/task/status"
+      })
+        .then(res => {
+          this.mailList = res.data.filter((item, index, array) => {
+            return item.type == "express";
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    refreshHand() {
+      this.axios({
+        method: "get",
+        url: "http://192.168.43.138:9000/task/status"
+      })
+        .then(res => {
+          this.handList = res.data.filter((item, index, array) => {
+            return item.type == "trade";
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
+  },
+  created() {
+    this.refreshFood();
+    this.refreshMail();
+    this.refreshHand();
   }
 };
 </script>
@@ -222,6 +299,11 @@ export default {
   top: 150px;
   right: 50px;
 }
+.addbutton_hand {
+  position: fixed;
+  top: 200px;
+  right: 50px;
+}
 .imgBody {
   background-image: url("../assets/img/3.jpg");
   height: 400px;
@@ -256,5 +338,16 @@ export default {
   top: 190px;
   color: white;
   font-size: 13px;
+}
+
+.no {
+  /* border: 1px solid red; */
+  width: 30%;
+  margin: 100px 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+.no img {
+  width: 100%;
 }
 </style>

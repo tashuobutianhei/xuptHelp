@@ -20,14 +20,13 @@
         </FormItem>
         <!-- action="//jsonplaceholder.typicode.com/posts/" -->
         <FormItem label="图片" prop="img">
-          <Upload
-            multiple
-            show-upload-list
-            action="http://192.168.43.138:9000/trade/empty"
-            :before-upload="getimg"
-          >
+          <Upload multiple show-upload-list action :before-upload="getimg">
             <Button icon="ios-cloud-upload-outline">上传图片</Button>
           </Upload>
+          <p v-if="file">
+            <Icon type="md-cloud-upload"/>
+            {{file.name}}
+          </p>
         </FormItem>
         <FormItem label="商品具体描述" prop="content">
           <Input
@@ -107,12 +106,9 @@ export default {
   methods: {
     handleSubmit(name) {
       this.$refs[name].validate(valid => {
-        // this.transform(this.formValidate.time);
         if (valid) {
           if (this.$store.state.islogin) {
             var params = new FormData();
-
-            console.log(this.formValidate.title);
             params.append("title", this.formValidate.title);
             params.append("content", this.formValidate.content);
             params.append("oldPrice", this.formValidate.oldprice);
@@ -129,10 +125,12 @@ export default {
               if (res.data == "success") {
                 this.$Message.success("添加成功!");
                 this.$emit("close");
+                this.handleSubmit(name);
               }
             });
           } else {
             this.$Message.error("先登录吧!");
+            this.handleSubmit(name);
           }
         } else {
           this.$Message.error("存在错误信息o!");

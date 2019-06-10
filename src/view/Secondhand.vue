@@ -2,6 +2,10 @@
   <div class="all">
     <Tabs :value="TabsValue" class="content">
       <TabPane label="待领取快递" name="wait">
+         <div v-if="handTaskList.length==0" class ="no" >
+          <img src="../assets/img/no.png" >
+          <p>还没有人发布哦</p>
+        </div>
         <SecondHandTask
           v-for="(item,index) in handTaskList"
           :key="item.taskId"
@@ -167,5 +171,12 @@ export default {
 .myget p {
   text-align: center;
   width: 100%;
+}
+
+.no {
+  width: 20%;
+  margin: 100px 50%;
+  transform: translateX(-50%);
+  text-align: center
 }
 </style>

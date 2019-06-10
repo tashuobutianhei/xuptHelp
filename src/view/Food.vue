@@ -2,6 +2,10 @@
   <div class="all">
     <Tabs :value="TabsValue" class="content">
       <TabPane label="待领取订单" name="wait">
+        <div v-if="foodTaskList.length==0" class ="no" >
+          <img src="../assets/img/no.png" >
+          <p>还没有人发布哦</p>
+        </div>
         <FoodTask
           v-for="(item) in foodTaskList"
           :key="item.taskId"
@@ -78,10 +82,10 @@ export default {
     Comment
   },
   data() {
-    return { 
+    return {
       foodTaskList: [], //待领取
-      foodTaskSelfList:[],  //发布
-      foodTaskOrderList:[],  //领取
+      foodTaskSelfList: [], //发布
+      foodTaskOrderList: [], //领取
       modalVisble: false,
       TabsValue: "wait",
       readyModalVisble: false,
@@ -111,12 +115,18 @@ export default {
         url: "http://192.168.43.138:9000/task/name"
       })
         .then(res => {
-          console.log()
+          console.log();
           this.foodTaskSelfList = res.data.filter((item, index, array) => {
-            return item.type == "food" && item.pubUser == this.$store.state.userInfo.username;
+            return (
+              item.type == "food" &&
+              item.pubUser == this.$store.state.userInfo.username
+            );
           });
           this.foodTaskOrderList = res.data.filter((item, index, array) => {
-            return item.type == "food" && item.subUser == this.$store.state.userInfo.username;
+            return (
+              item.type == "food" &&
+              item.subUser == this.$store.state.userInfo.username
+            );
           });
         })
         .catch(err => {
@@ -200,5 +210,12 @@ export default {
 .myget p {
   text-align: center;
   width: 100%;
+}
+
+.no {
+  width: 20%;
+  margin: 100px 50%;
+  transform: translateX(-50%);
+  text-align: center
 }
 </style>

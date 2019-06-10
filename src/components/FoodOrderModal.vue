@@ -136,10 +136,12 @@ export default {
               if (res.data == "success") {
                 this.$Message.success("添加成功!");
                 this.$emit("close");
+                this.handleSubmit(name)
               }
             });
           } else {
             this.$Message.error("先登录吧!");
+            this.handleSubmit(name)
           }
         } else {
           this.$Message.error("存在错误信息o!");
