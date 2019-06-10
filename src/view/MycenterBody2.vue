@@ -1,15 +1,17 @@
 <template>
-  <Row>
-    <Col span="8">
-      <taskcard :info="foodList"></taskcard>
-    </Col>
-    <Col span="8" offset="0">
-      <taskcard :info="mailList"></taskcard>
-    </Col>
-    <Col span="8" offset="0">
-      <taskcard :info="secondhandList"></taskcard>
-    </Col>
-  </Row>
+  <div class="bodycontent">
+    <Row>
+      <Col span="8">
+        <taskcard :info="foodList"></taskcard>
+      </Col>
+      <Col span="8">
+        <taskcard :info="mailList"></taskcard>
+      </Col>
+      <Col span="8">
+        <taskcard :info="secondhandList"></taskcard>
+      </Col>
+    </Row>
+  </div>
 </template>
 <script>
 import taskcard from "../components/TaskCard";
@@ -115,4 +117,8 @@ export default {
 };
 </script>
 <style scoped>
+.bodycontent {
+  background-color: #fff;
+  margin-left: 1px;
+}
 </style>

@@ -8,7 +8,9 @@
         </Menu>
       </Sider>
       <Content>
-        <router-view></router-view>
+        <transition name="fade" mode="out-in">
+          <router-view></router-view>
+        </transition>
       </Content>
     </Layout>
   </div>
@@ -17,13 +19,20 @@
 export default {};
 </script>
 <style scoped>
-.content{
-    min-height: 624px
+.content {
+  min-height: 623px;
 }
 .menu {
   background-color: white;
 }
 .content {
   margin-top: 10px;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

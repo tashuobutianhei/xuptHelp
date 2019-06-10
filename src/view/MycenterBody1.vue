@@ -1,6 +1,6 @@
 <template>
   <div class="bodycontent">
-    <Card shadow :bordered="false" :padding="16" style="margin-top:5px">
+    <Card  :bordered="false" :padding="16" style="margin-top:2px">
       <p slot="title">用户名</p>
       <div style="display:flex">
         <div class="cardcontent">
@@ -9,7 +9,7 @@
       </div>
     </Card>
 
-    <Card shadow :bordered="false" :padding="16" style="margin-top:5px">
+    <Card  :bordered="false" :padding="16" style="margin-top:2px">
       <p slot="title">个人昵称</p>
       <div style="display:flex">
         <div class="cardcontent">
@@ -24,7 +24,7 @@
       </div>
     </Card>
 
-    <Card shadow :bordered="false" :padding="16" style="margin-top:5px">
+    <Card  :bordered="false" :padding="16" style="margin-top:2px">
       <p slot="title">个人头像</p>
       <div style="display: flex;">
         <div class="cardcontent" style="height:70px; background-color: pink;width:500px">
@@ -38,7 +38,7 @@
       </div>
     </Card>
 
-    <Card shadow :bordered="false" :padding="16" style="margin-top:5px">
+    <Card  :bordered="false" :padding="16" style="margin-top:2px">
       <p slot="title">手机号码</p>
       <div style="display:flex">
         <div class="cardcontent">
@@ -53,7 +53,7 @@
       </div>
     </Card>
 
-    <Card shadow :bordered="false" :padding="16" style="margin-top:5px">
+    <Card  :bordered="false" :padding="16" style="margin-top:2px">
       <p slot="title">邮箱地址</p>
       <div style="display:flex">
         <div class="cardcontent">
