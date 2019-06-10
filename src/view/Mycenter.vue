@@ -17,9 +17,9 @@
 export default {};
 </script>
 <style scoped>
-/* .content{
-    min-height: 600px
-} */
+.content{
+    min-height: 624px
+}
 .menu {
   background-color: white;
 }

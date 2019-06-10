@@ -1,15 +1,30 @@
 <template>
   <div class="bodycontent">
-    <Card :bordered="false" :padding="16">
+    <Card shadow :bordered="false" :padding="16" style="margin-top:5px">
       <p slot="title">用户名</p>
       <div style="display:flex">
         <div class="cardcontent">
-          <p>dalao</p>
+          <p>{{userInfo.userName}}</p>
         </div>
       </div>
     </Card>
 
-    <Card :bordered="false" :padding="16">
+    <Card shadow :bordered="false" :padding="16" style="margin-top:5px">
+      <p slot="title">个人昵称</p>
+      <div style="display:flex">
+        <div class="cardcontent">
+          <p>{{userInfo.nickName}}</p>
+        </div>
+        <div style="width: 300px; margin-left:50px; height:32px">
+          <Input v-model="nickName" placeholder="输入要修改的昵称" style="width: 300px;"/>
+        </div>
+        <Poptip class="btn" confirm title="你确定修改吗？" @on-ok="updateNickname" @on-cancel="cancel">
+          <Button type="primary">修改昵称</Button>
+        </Poptip>
+      </div>
+    </Card>
+
+    <Card shadow :bordered="false" :padding="16" style="margin-top:5px">
       <p slot="title">个人头像</p>
       <div style="display: flex;">
         <div class="cardcontent" style="height:70px; background-color: pink;width:500px">
@@ -23,51 +38,96 @@
       </div>
     </Card>
 
-    <mycard :info="nickname"></mycard>
-    <mycard :info="mail"></mycard>
-    <mycard :info="info"></mycard>
+    <Card shadow :bordered="false" :padding="16" style="margin-top:5px">
+      <p slot="title">手机号码</p>
+      <div style="display:flex">
+        <div class="cardcontent">
+          <p>{{userInfo.phoneNumber}}</p>
+        </div>
+        <div style="width: 300px; margin-left:50px; height:32px">
+          <Input v-model="phoneNumber" placeholder="输入要修改的号码" style="width: 300px"/>
+        </div>
+        <Poptip class="btn" confirm title="你确定修改吗？" @on-ok="updatePhonenumber" @on-cancel="cancel">
+          <Button type="primary">修改号码</Button>
+        </Poptip>
+      </div>
+    </Card>
+
+    <Card shadow :bordered="false" :padding="16" style="margin-top:5px">
+      <p slot="title">邮箱地址</p>
+      <div style="display:flex">
+        <div class="cardcontent">
+          <p>{{userInfo.email}}</p>
+        </div>
+        <div style="width: 300px; margin-left:50px; height:32px">
+          <Input v-model="email" placeholder="输入要修改邮箱地址" style="width: 300px"/>
+        </div>
+        <Poptip class="btn" confirm title="你确定修改吗？" @on-ok="updateEmail" @on-cancel="cancel">
+          <Button type="primary">修改邮箱</Button>
+        </Poptip>
+      </div>
+    </Card>
   </div>
 </template>
 
 
 <script>
-import mycard from "../components/UserInfoCard";
 export default {
-  components: {
-    mycard
-  },
   data() {
     return {
-      info: {
-        name: "手机号码",
-        value: "12345679",
-        do: "更改号码"
-      },
-      mail: {
-        name: "邮箱地址",
-        value: "132132131@qq.com",
-        do: "修改地址"
-      },
-      nickname: {
-        name: "昵称",
-        value: "大佬",
-        do: "修改昵称"
-      },
-      flag: false
+      userName: "",
+      nickName: "",
+      phoneNumber: "",
+      email: "",
+      myicon: "",
+      userInfo: {
+        userName: "dalao",
+        nickName: "大佬",
+        myicon: "",
+        phoneNumber: "13213213213",
+        email: "1321321231@qq.com"
+      }
     };
   },
-  created(){
-    this.axios({
-      method:'get',
-      url:'',
-      params:{
-    
-      }
-    }).then(res => {
 
-    }).catch(err => {]
-      
+  methods: {
+    uploadChange() {
+      return 1;
+    },
+    updateNickname() {
+      this.userInfo.nickName = this.nickName;
+      if (this.uploadChange()) {
+        this.$Message.info("修改成功");
+      }
+    },
+    updatePhonenumber() {
+      this.userInfo.phoneNumber = this.phoneNumber;
+      if (this.uploadChange()) {
+        this.$Message.info("修改成功");
+      }
+    },
+    updateEmail() {
+      this.userInfo.email = this.email;
+    },
+    updatemyicon() {},
+    cancel() {
+      this.$Message.info("你取消了操作");
+      if (this.uploadChange()) {
+        this.$Message.info("修改成功");
+      }
+    }
+  },
+
+  created() {
+    this.axios({
+      method: "get",
+      url: "http://192.168.43.138:9000/user/",
+      params: {}
     })
+      .then(res => {})
+      .catch(err => {
+        [];
+      });
   }
 };
 </script>
@@ -76,6 +136,7 @@ export default {
 <style scoped>
 .bodycontent {
   background-color: #fff;
+  margin-left: 1px;
 }
 .cardcontent {
   width: 150px;
@@ -84,14 +145,6 @@ export default {
 }
 .btn {
   margin: auto;
-}
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
 }
 </style>
 
