@@ -1,16 +1,21 @@
 <template>
   <div>
     <Modal
-      v-model="modalVisble"
+      v-model="visible"
       title="订单信息"
       @on-ok="ok"
       @on-cancel="cancel"
       :loading="loginloading"
+      :mask-closable="false"
     >
+      <div slot="footer">
+        <Button type="primary" size="large" long  @click="ok">确认添加</Button>
+      </div>
       <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
         <FormItem label="地址" prop="address">
           <Input v-model="formValidate.address" placeholder="地址"></Input>
         </FormItem>
+        <p style="display:none">{{visibleComputed}}</p>
         <FormItem label="电话" prop="tel">
           <Input v-model="formValidate.tel" placeholder="电话走一波"></Input>
         </FormItem>
@@ -38,8 +43,15 @@
 <script>
 export default {
   props: ["modalVisble"],
+  computed: {
+    visibleComputed() {
+      this.visible = this.modalVisble;
+      return this.modalVisble;
+    }
+  },
   data() {
     return {
+      visible: false,
       loginloading: true,
       numberMax: 10,
       numberMin: 2,
@@ -106,7 +118,7 @@ export default {
     },
     handleSubmit(name) {
       this.$refs[name].validate(valid => {
-        this.transform(this.formValidate.time);
+        // this.transform(this.formValidate.time);
         if (valid) {
           if (this.$store.state.islogin) {
             this.axios({
@@ -116,7 +128,7 @@ export default {
                 address: this.formValidate.address,
                 phone: this.formValidate.tel,
                 pay: this.formValidate.pay,
-                const: this.formValidate.money,
+                cost: this.formValidate.money,
                 description: this.formValidate.food,
                 time: this.transform(this.formValidate.time)
               }
@@ -138,7 +150,7 @@ export default {
       this.$refs[name].resetFields();
     },
     ok() {
-      //this.$emit('close')
+      // this.$emit('close')
       this.handleSubmit("formValidate");
       this.$Message.info("Clicked ok");
     },

@@ -18,16 +18,7 @@
       <Col :md="8" :sm="24" :xs="24">
         <Carousel autoplay v-model="imgwhich" loop :autoplay-speed="5000">
           <CarouselItem>
-            <div class="demo-carousel"><img  class="img" src="../assets/img/book.jpg"></img></div>
-          </CarouselItem>
-          <CarouselItem>
-            <div class="demo-carousel"><img  class="img" src="../assets/img/book.jpg"></img></div>
-          </CarouselItem>
-          <CarouselItem>
-            <div class="demo-carousel"><img  class="img" src="../assets/img/book.jpg"></img></div>
-          </CarouselItem>
-          <CarouselItem>
-            <div class="demo-carousel"><img  class="img" src="../assets/img/book.jpg"></img></div>
+            <div class="demo-carousel"><img  class="img" :src="img"></img></div>
           </CarouselItem>
         </Carousel>
       </Col>
@@ -45,7 +36,7 @@
           </p>-->
            <p>
           <span> 卖家：</span>
-          {{Info.nickname}}
+          {{Info.pubUser}}
         </p>
           <p>
             <span>商品描述：</span>
@@ -53,15 +44,15 @@
           </p>
           <p>
             <span>入手价：</span>
-            {{Info.old_price}}
+            {{Info.oldPrice}}
           </p>
           <p>
             <span>出手价：</span>
-            {{Info.new_price}}
+            {{Info.newPrice}}
           </p>
           <p>
             <span>联系方式：</span>
-            {{transform(Info.tel)}}
+            {{transform(Info.phone)}}
           </p>
         </div>
       </Col>
@@ -129,15 +120,11 @@ export default {
       imgwhich:0
     };
   },
-  //   computed: {
-  //     mailContent() {
-  //       if (this.status == 0) {
-  //         return this.Info.content.replace(/[0-9]/g, "*");
-  //       } else {
-  //         return this.Info.content;
-  //       }
-  //     }
-  //   },
+    computed: {
+      img() {
+       return `http://192.168.43.138:9000/${this.Info.image}`
+      }
+    },
   methods: {
     getOrder() {
       this.$emit("getOrder", {});

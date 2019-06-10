@@ -3,11 +3,11 @@
     <Tabs :value="TabsValue" class="content">
       <TabPane label="待领取快递" name="wait">
         <MailTask
-          v-for="(item,index) in mailList"
+          v-for="(item,index) in mailTaskList"
           :key="index"
           class="task"
           type="order"
-          status="0"
+          :status="item.status"
           @getOrder="getOrder"
           :mailInfo="item"
         ></MailTask>
@@ -31,9 +31,8 @@
           <Col span="12" class="myget">
             <P>我的领取</P>
             <MailTask
-             
               v-for="(item,index) in mailList"
-               v-if="index != 0"
+              v-if="index != 0"
               :key="index"
               class="mytask"
               type="order"
@@ -78,6 +77,7 @@ export default {
   },
   data() {
     return {
+      mailTaskList:[],
       modalVisble: false,
       TabsValue: "wait",
       readyModalVisble: false,
@@ -107,6 +107,21 @@ export default {
     changewirteVisble() {
       this.wirteVisble = false;
     }
+  },
+  created() {
+    this.axios({
+      method: "get",
+      url: "http://192.168.43.138:9000/task/status"
+    })
+      .then(res => {
+        console.log(res);
+          this.mailTaskList = res.data.filter((item,index,array)=>{
+          return item.type == 'express'
+        })
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 };
 </script>

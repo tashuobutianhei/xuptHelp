@@ -3,24 +3,14 @@
     <Tabs :value="TabsValue" class="content">
       <TabPane label="待领取快递" name="wait">
         <SecondHandTask
-          v-for="(item,index) in List"
-          :key="index"
+          v-for="(item,index) in handTaskList"
+          :key="item.taskId"
           :Info="item"
           class="task"
           type="order"
-          status="0"
+          :status="item.status"
           @getOrder="getOrder"
         ></SecondHandTask>
-
-        <!-- <MailTask
-          v-for="(item,index) in mailList"
-          :key="index"
-          class="task"
-          type="order"
-          status="0"
-          @getOrder="getOrder"
-          :mailInfo="item"
-        ></MailTask>-->
       </TabPane>
 
       <TabPane label="我的记录" name="my">
@@ -37,16 +27,6 @@
               :status="index"
               @getOrder="getOrder"
             ></SecondHandTask>
-            <!-- <MailTask
-              v-for="(item,index) in mailList"
-              :key="index"
-              class="mytask"
-              type="release"
-              :status="index"
-              :mailInfo="item"
-            ></MailTask>-->
-            <!-- <MailTask class="mytask" type="release" status="1"></MailTask>
-            <MailTask class="mytask" type="release" status="2"></MailTask>-->
           </Col>
           <Col span="12" class="myget">
             <P>我的购买</P>
@@ -60,16 +40,6 @@
               :status="index"
               @getOrder="getOrder"
             ></SecondHandTask>
-            <!-- <MailTask
-              v-for="(item,index) in mailList"
-              v-if="index != 0"
-              :key="index"
-              class="mytask"
-              type="order"
-              :status="index"
-              :mailInfo="item"
-            ></MailTask>-->
-            <!-- <MailTask class="mytask" type="order" status="2"></MailTask> -->
           </Col>
         </Row>
       </TabPane>
@@ -97,7 +67,7 @@ import SecondHandTask from "../components/SecondHandTask";
 import MailTask from "../components/MailTask";
 import MailOrderModal from "../components/MailOrderModal";
 import Comment from "../components/Comment";
-import SecondhandModal from '../components/SecondhandModal'
+import SecondhandModal from "../components/SecondhandModal";
 
 import CONST from "../common/index.js";
 
@@ -111,6 +81,7 @@ export default {
   },
   data() {
     return {
+      handTaskList:[],
       List: CONST.secondHandTask.secondHandTaskList,
       modalVisble: false,
       TabsValue: "wait",
@@ -120,6 +91,20 @@ export default {
     };
   },
   methods: {
+    refresh() {
+      this.axios({
+        method: "get",
+        url: "http://192.168.43.138:9000/task/status"
+      })
+        .then(res => {
+          this.handTaskList = res.data.filter((item, index, array) => {
+            return item.type == "trade";
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     close() {
       this.modalVisble = false;
     },
@@ -141,6 +126,9 @@ export default {
     changewirteVisble() {
       this.wirteVisble = false;
     }
+  },
+  created(){
+    this.refresh()
   }
 };
 </script>
