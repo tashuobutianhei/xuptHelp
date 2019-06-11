@@ -125,7 +125,7 @@ export default {
               if (res.data == "success") {
                 this.$Message.success("添加成功!");
                 this.$emit("close");
-                this.handleSubmit(name);
+                this.handleReset(name);
               }
             });
           } else {

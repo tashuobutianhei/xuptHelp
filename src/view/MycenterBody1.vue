@@ -1,6 +1,6 @@
 <template>
   <div class="bodycontent">
-    <Card  :bordered="false" :padding="16" style="margin-top:2px">
+    <Card :bordered="false" :padding="16" style="margin-top:2px">
       <p slot="title">用户名</p>
       <div style="display:flex">
         <div class="cardcontent">
@@ -9,7 +9,7 @@
       </div>
     </Card>
 
-    <Card  :bordered="false" :padding="16" style="margin-top:2px">
+    <Card :bordered="false" :padding="16" style="margin-top:2px">
       <p slot="title">个人昵称</p>
       <div style="display:flex">
         <div class="cardcontent">
@@ -24,21 +24,21 @@
       </div>
     </Card>
 
-    <Card  :bordered="false" :padding="16" style="margin-top:2px">
+    <Card :bordered="false" :padding="16" style="margin-top:2px">
       <p slot="title">个人头像</p>
       <div style="display: flex;">
-        <div class="cardcontent" style="height:70px; background-color: pink;width:500px">
-          <img src alt="个人头像" style="background-color: gold;">
+        <div class="cardcontent" style="height:70px;width:500px">
+          <img class="myicon" :src="userInfo.myicon" alt="个人头像" style="background-color: gold;">
         </div>
         <div style="margin:auto">
-          <Upload action="//jsonplaceholder.typicode.com/posts/">
+          <Upload action :before-upload="updatemyicon">
             <Button class="btn" type="primary" icon="ios-cloud-upload-outline">修改头像</Button>
           </Upload>
         </div>
       </div>
     </Card>
 
-    <Card  :bordered="false" :padding="16" style="margin-top:2px">
+    <Card :bordered="false" :padding="16" style="margin-top:2px">
       <p slot="title">手机号码</p>
       <div style="display:flex">
         <div class="cardcontent">
@@ -53,7 +53,7 @@
       </div>
     </Card>
 
-    <Card  :bordered="false" :padding="16" style="margin-top:2px">
+    <Card :bordered="false" :padding="16" style="margin-top:2px">
       <p slot="title">邮箱地址</p>
       <div style="display:flex">
         <div class="cardcontent">
@@ -81,50 +81,85 @@ export default {
       email: "",
       myicon: "",
       userInfo: {
-        userName: "dalao",
-        nickName: "大佬",
+        userName: "",
+        nickName: "",
         myicon: "",
-        phoneNumber: "13213213213",
-        email: "1321321231@qq.com"
+        phoneNumber: "",
+        email: ""
       }
     };
   },
 
   methods: {
     uploadChange() {
-      return 1;
+      var params = new FormData();
+      params.append("nickName", this.userInfo.nickName);
+      params.append("phone", this.userInfo.phoneNumber);
+      params.append("email", this.userInfo.email);
+      params.append("file", this.myicon);
+      this.axios({
+        method: "put",
+        url: "http://192.168.43.138:9000/user/",
+        headers: { "Content-Type": "multipart/form-data" },
+        data: params
+      }).then(res => {
+        if (res.data == "success") {
+          this.$Message.success("修改成功");
+          this.$emit("close");
+        }
+      });
     },
+
     updateNickname() {
       this.userInfo.nickName = this.nickName;
+      this.nickName = "";
       if (this.uploadChange()) {
         this.$Message.info("修改成功");
       }
     },
     updatePhonenumber() {
       this.userInfo.phoneNumber = this.phoneNumber;
+      this.phoneNumber = "";
       if (this.uploadChange()) {
         this.$Message.info("修改成功");
       }
     },
     updateEmail() {
       this.userInfo.email = this.email;
-    },
-    updatemyicon() {},
-    cancel() {
-      this.$Message.info("你取消了操作");
+      this.email = "";
       if (this.uploadChange()) {
         this.$Message.info("修改成功");
       }
+    },
+    updatemyicon(myicon) {
+      console.log(myicon);
+      this.myicon=myicon
+      this.userInfo.myicon = this.myicon;
+      if (this.uploadChange()) {
+        this.$Message.info("修改成功");
+      }
+
+      // this.userInfo.myicon = `http://192.168.43.138:9000/${myicon.name}`;
+    },
+    cancel() {
+      this.$Message.info("你取消了操作");
     }
   },
 
   created() {
     this.axios({
       method: "get",
-      url: "http://192.168.43.138:9000/user/",
-      params: {}
+      url: "http://192.168.43.138:9000/user/"
     })
-      .then(res => {})
+      .then(res => {
+        (this.userInfo.userName = res.data.userName),
+          (this.userInfo.nickName = res.data.nickName),
+          (this.userInfo.phoneNumber = res.data.phone),
+          (this.userInfo.email = res.data.email),
+          (this.userInfo.myicon = `http://192.168.43.138:9000/${
+            res.data.image
+          }`);
+      })
       .catch(err => {
         [];
       });
@@ -145,6 +180,10 @@ export default {
 }
 .btn {
   margin: auto;
+}
+.myicon {
+  height: 70px;
+  width: 70px;
 }
 </style>
 
