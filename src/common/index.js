@@ -9,7 +9,8 @@ export default {
                 moeny:"12",
                 time: "6/4 17:30前",
                 address: "东区安悦公寓412",
-                tel: '18392120131'
+                tel: '18392120131',
+                pubUser:111
             },
             {
                 nickname: '假装有一个名字',
@@ -19,7 +20,9 @@ export default {
                 moeny:"12",
                 time: "6/4 17:30前",
                 address: "东区安悦公寓412",
-                tel: '18392120131'
+                tel: '18392120131',               
+                pubUser:111
+
             },
             {
                 nickname: '假装有一个名字',
@@ -29,7 +32,9 @@ export default {
                 moeny:"12",
                 time: "6/4 17:30前",
                 address: "东区安悦公寓412",
-                tel: '18392120131'
+                tel: '18392120131',               
+                pubUser:111
+
             },
         ],
         commentList: [
@@ -56,7 +61,9 @@ export default {
             pay: "5",
             time: "6/4 17:30前",
             address: "东区安悦公寓412",
-            tel: '18392120131'
+            tel: '18392120131',               
+            pubUser:111
+
         },
         {
             nickname: '假装有一个名字',
@@ -65,7 +72,9 @@ export default {
             pay: "5",
             time: "6/4 17:30前",
             address: "东区安悦公寓412",
-            tel: '18392120131'
+            tel: '18392120131',               
+            pubUser:111
+
         }, {
             nickname: '假装有一个名字',
             username: 'tahsuobutianhei',
@@ -73,7 +82,9 @@ export default {
             pay: "5",
             time: "6/4 17:30前",
             address: "东区安悦公寓412",
-            tel: '18392120131'
+            tel: '18392120131',               
+            pubUser:111
+
         }
     ],
     secondHandTask:{
@@ -91,7 +102,28 @@ export default {
             },{
                 nickname: '假装有一个名字',
                 username: 'tahsuobutianhei',
+                content: "业啦！课本出售毕业啦！课本出售毕业啦！课本出售毕业啦！课本出售",
+                old_price: "240",
+                new_price: "100",
+                address: "东区安悦公寓412",
+                img:'',
+                title:'毕业啦！课本出售',
+                tel: '18392120131'
+            },
+            {
+                nickname: '假装有一个名字',
+                username: 'tahsuobutianhei',
                 content: "毕业啦！课本出售毕业啦！课本出售毕业啦！课本出售毕业啦！课本出售毕业啦！课本出售毕业啦！课本出售毕业啦！课本出售",
+                old_price: "240",
+                new_price: "100",
+                address: "东区安悦公寓412",
+                img:'',
+                title:'毕业啦！课本出售',
+                tel: '18392120131'
+            },{
+                nickname: '假装有一个名字',
+                username: 'tahsuobutianhei',
+                content: "业啦！课本出售毕业啦！课本出售毕业啦！课本出售毕业啦！课本出售",
                 old_price: "240",
                 new_price: "100",
                 address: "东区安悦公寓412",

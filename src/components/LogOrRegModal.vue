@@ -48,7 +48,7 @@
 <script>
 import axios from "axios";
 axios.defaults.withCredentials = true; //配置为true
-import Tool from '../common/tool.js'
+import Tool from "../common/tool.js";
 
 export default {
   data() {
@@ -186,8 +186,8 @@ export default {
             .then(res => {
               console.log(res);
 
-              Tool.setCookie('token',res.data);
-              Tool.setCookie('username',this.formLogin.username);
+              Tool.setCookie("token", res.data);
+              Tool.setCookie("username", this.formLogin.username);
 
               this.$Message.success("登录成功!");
 
@@ -197,6 +197,19 @@ export default {
               });
 
               this.$refs["formLogin"].resetFields();
+              this.axios({
+                method: "get",
+                url: "http://192.168.43.138:9000/manager/"
+              })
+                .then(res => {
+                  if (res.data == "success") {
+                    this.$store.commit("changeOauth", "manger");
+                  } else {
+                  }
+                })
+                .catch(err => {
+                  console.log(err);
+                });
             })
             .catch(err => {
               console.log(err);

@@ -18,6 +18,9 @@
             <MenuItem name="SecondHand" to="/SecondHand">
               <Icon type="ios-paper"></Icon>二手交易
             </MenuItem>
+            <MenuItem name="Manger" to="/Manger" v-if="$store.state.oauth === 'manger'">
+              <Icon type="ios-paper"></Icon>管理
+            </MenuItem>
           </div>
 
           <div v-if="$store.state.islogin" class="avatar">
@@ -73,6 +76,7 @@ export default {
       Tool.delCookie("token");
       Tool.delCookie("username");
       this.$store.commit("loginOut");
+      this.$store.commit("changeOauth", "");
     }
   },
   mounted() {
@@ -87,7 +91,21 @@ export default {
         username: username,
         nickname: "一个昵称"
       });
-    } 
+
+      this.axios({
+        method: "get",
+        url: "http://192.168.43.138:9000/manager/"
+      })
+        .then(res => {
+          if (res.data == "success") {
+            this.$store.commit("changeOauth", "manger");
+          } else {
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   }
 };
 </script>

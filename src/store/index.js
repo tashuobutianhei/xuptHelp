@@ -2,7 +2,8 @@
 export default {
     state:{
         islogin:false,
-        userInfo:{}
+        userInfo:{},
+        oauth:''
     },
     mutations:{
         login(state,userInfo){
@@ -12,5 +13,8 @@ export default {
         loginOut(state){
             state.islogin = false;
         },
+        changeOauth(state,oauth) {
+            state.oauth = oauth;
+        }
     }
 }

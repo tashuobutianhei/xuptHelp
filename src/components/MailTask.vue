@@ -13,7 +13,7 @@
     </Row>
     <Row class="conent">
       <Col>
-        <p>
+        <p class="mailContent">
           <span>{{mailInfo.pubUser}} 的快递：</span>
           {{transform(mailInfo.content)}}
         </p>
@@ -73,6 +73,11 @@
           v-if="type=='release' && status==2 "
           icon="md-chatboxes"
         >评价</Button>
+
+        <Poptip confirm title="?" class="MangerButton" v-if="status==5 ">
+          <Button type="error" icon="md-heart" size="small">下架</Button>
+          <Button type="warning" icon="md-heart" size="small">清理</Button>
+        </Poptip>
       </Col>
     </Row>
   </div>
@@ -179,6 +184,9 @@ export default {
   position: absolute;
   bottom: 10px;
   right: 10px;
+}
+.mailContent {
+  height: 80px;
 }
 </style>
 

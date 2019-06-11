@@ -14,33 +14,25 @@
         </div>
       </Col>
     </Row>
-    <Row class="conent">
-      <Col :md="8" :sm="24" :xs="24">
+    <Row class="conent"  :gutter="8">
+      <Col :md="12" :sm="24" :xs="24">
         <Carousel autoplay v-model="imgwhich" loop :autoplay-speed="5000">
           <CarouselItem>
             <div class="demo-carousel"><img  class="img" :src="img"></img></div>
           </CarouselItem>
         </Carousel>
       </Col>
-      <!-- <Col span="15">
-        <p>
-          <span> 卖家：</span>
-          {{Info.nickname}}
-        </p>
-      </Col> -->
-      <Col style="margin-top:5px"  :xl="15"  :md="24" :xs="24">
+      
+      <Col style="margin-top:5px"  :xl="style"  :md="24" :xs="24">
         <div class="value">
-          <!-- <p>
-            <span class="span">预计金额：</span>
-            ￥{{money}}
-          </p>-->
+        
            <p>
           <span> 卖家：</span>
           {{Info.pubUser}}
         </p>
-          <p>
+          <p class="storeContent">
             <span>商品描述：</span>
-            ￥{{Info.content}}
+            {{Info.content}}
           </p>
           <p>
             <span>入手价：</span>
@@ -67,27 +59,37 @@
           @click="getOrder"
         >马上入手</Button>
 
-        <Poptip confirm title="确认收货了吗?" @on-ok="readyOrder" class="orderButton">
+        <!-- <Poptip confirm title="确认收货了吗?" @on-ok="readyOrder" class="orderButton">
           <Button type="warning" v-if="type=='order' && status==1 " icon="md-alarm">等待同意</Button>
+        </Poptip> -->
+        <Poptip confirm title="快去送货?"  @on-ok="getMyOrder" class="orderButton">
+          <Button type="primary" class="orderButton" v-if="type=='order' && status==1 " >确认收货</Button>
         </Poptip>
 
-        <Button type="primary" class="orderButton" v-if="type=='order' && status==2 " >确认收货</Button>
-
-        <Button type="warning" class="orderButton" v-if="type=='order' && status==3 " >待评论</Button>
+        <Button type="warning" class="orderButton" v-if="type=='order' && status==2 " >待评论</Button>
 
 
         <Poptip confirm title="确认退单吗?" @on-ok="outOrder" class="orderButton">
-          <Button type="primary" v-if="type=='release' && status==0 " icon="md-clock">待出价</Button>
+          <Button type="primary" v-if="type=='release' && status==0 " icon="md-clock">等待买家</Button>
         </Poptip>
 
-        <Poptip confirm title="选一个交易?" @on-ok="getMyOrder" class="orderButton">
-          <Button type="primary" v-if="type=='release' && status==1 " icon="md-heart">确认交易</Button>
+        <Poptip confirm title="快去送货?"  class="orderButton">
+          <Button type="primary" v-if="type=='release' && status==1 " icon="md-heart">待送货(快去送货)</Button>
         </Poptip>
 
-        <Poptip confirm title="确认收货了吗?" @on-ok="getMyOrder" class="orderButton">
-          <Button type="primary" v-if="type=='release' && status==2 " icon="md-heart">确认收货</Button>
+        <Poptip confirm title="确认收货了吗?"  class="orderButton">
+          <Button type="primary" v-if="type=='release' && status==2 " icon="md-heart">交易完成</Button>
         </Poptip>
 
+        <Poptip confirm title="?" class="checkButton" v-if="type =='manger' && status==-1 ">
+          <Button type="primary" icon="md-heart" size="small">通过</Button>
+          <Button type="primary" icon="md-heart" size="small">不通过</Button>
+        </Poptip>
+
+        <Poptip confirm title="确认了吗？?" class="MangerButton" v-if="type =='manger' && status!=-1 ">
+          <Button type="error" icon="md-heart" size="small">下架</Button>
+          <Button type="warning" icon="md-heart" size="small">清理</Button>
+        </Poptip>
         <!-- <Button
           type="warning"
           class="orderButton"
@@ -96,6 +98,8 @@
         >评价</Button> -->
       </Col>
     </Row>
+    <Comment :taskId="Info.taskId" v-if="type != 'manger'&& status == 0"></Comment>
+ 
   </div>
 </template>
 <script>
@@ -103,15 +107,35 @@
 /*
 卖家：待出价 -出价-> 待同意 -同意了-> 完成交易
 买家：待同意 -同意-> 待交易 -交易了-> 完成（评价）
+
+
+0 未领取
+1 为交易
+2 交易完成
+
+发布者：release
+0 等待买家  退单
+1 待送货   无
+2 完成
+
+订单：order
+0 接单  
+1 待送货   无
+2 收到货物 确认收货
+
+
 */
+import Comment from './Comment'
 const status = {
   0: "待出价",
-  1: "待同意",
-  2: "待交易",
-  3: "已完成",
+  1: "待交易",
+  2: "已完成",
 };
 export default {
-  props: ["type", "status", "Info"],
+  props: ["type", "status", "Info","rowStyle"],
+  components:{
+    Comment
+  },
   data() {
     return {
       time: new Date(),
@@ -123,6 +147,14 @@ export default {
     computed: {
       img() {
        return `http://192.168.43.138:9000/${this.Info.image}`
+      },
+      style() {
+       
+        if(this.rowStyle == '1'){
+          return 24
+        } else {
+          return 12
+        }
       }
     },
   methods: {
@@ -212,6 +244,17 @@ export default {
 }
 .img {
   width: 100%;
+}
+
+.checkButton {
+/* position: absolute;
+  bottom: 10px;
+  right: 10px;
+  */
+}
+.storeContent {
+  height: 100px;
+  max-height: 100px;
 }
 </style>
 

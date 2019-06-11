@@ -130,7 +130,7 @@ export default {
             });
           } else {
             this.$Message.error("先登录吧!");
-            this.handleSubmit(name);
+            this.handleReset(name);
           }
         } else {
           this.$Message.error("存在错误信息o!");

@@ -13,7 +13,7 @@
     </Row>
     <Row class="conent">
       <Col>
-        <p>
+        <p class="foodConent">
           <span>{{foodInfo.pubUser}} 想吃：</span>
           {{foodInfo.description}}
         </p>
@@ -61,7 +61,12 @@
 
         <Button type="primary" class="orderButton" v-if="type=='order' && status==2 " disabled>已完成</Button>
 
-        <Button type="primary" class="orderButton" v-if="type=='release' && status==-1 " disabled>已退单</Button>
+        <Button
+          type="primary"
+          class="orderButton"
+          v-if="type=='release' && status==-1 "
+          disabled
+        >已退单</Button>
 
         <Poptip confirm title="确认退单吗?" @on-ok="outOrder" class="orderButton">
           <Button type="primary" v-if="type=='release' && status==0 " icon="md-clock">待领取</Button>
@@ -77,6 +82,11 @@
           v-if="type=='release' && status==2 "
           icon="md-chatboxes"
         >评价</Button>
+
+        <Poptip confirm title="?" class="MangerButton" v-if="status==5 ">
+          <Button type="error" icon="md-heart" size="small">下架</Button>
+          <Button type="warning" icon="md-heart" size="small">清理</Button>
+        </Poptip>
       </Col>
     </Row>
   </div>
@@ -194,5 +204,15 @@ export default {
   position: absolute;
   bottom: 10px;
   right: 10px;
+}
+.MangerButton {
+  /* width: 150px;
+  border: #666666 1px solid; */
+  /* position: absolute;
+  bottom: 0px;
+  right: 10px; */
+}
+.foodConent {
+  height: 80px;
 }
 </style>

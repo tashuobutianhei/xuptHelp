@@ -29,6 +29,7 @@
               class="task"
               type="release"
               :status="index"
+              :rowStyle="1"
               @getOrder="getOrder"
             ></SecondHandTask>
           </Col>
@@ -42,6 +43,7 @@
               class="task"
               type="order"
               :status="index"
+              :rowStyle="1"
               @getOrder="getOrder"
             ></SecondHandTask>
           </Col>
