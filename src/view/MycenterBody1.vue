@@ -96,7 +96,6 @@ export default {
       params.append("nickName", this.userInfo.nickName);
       params.append("phone", this.userInfo.phoneNumber);
       params.append("email", this.userInfo.email);
-      params.append("file", this.myicon);
       this.axios({
         method: "put",
         url: "http://192.168.43.138:9000/user/",
@@ -133,13 +132,21 @@ export default {
     },
     updatemyicon(myicon) {
       console.log(myicon);
-      this.myicon=myicon
-      this.userInfo.myicon = this.myicon;
-      if (this.uploadChange()) {
-        this.$Message.info("修改成功");
-      }
-
-      // this.userInfo.myicon = `http://192.168.43.138:9000/${myicon.name}`;
+      var params = new FormData();
+      params.append("file", myicon);
+      this.axios({
+        method: "post",
+        url: "http://192.168.43.138:9000/user/",
+        headers: { "Content-Type": "multipart/form-data" },
+        data: params
+      }).then(res => {
+        if (res.data == "success") {
+          this.$Message.success("修改成功");
+          this.$emit("close");
+        }
+      });
+      this.myicon = "";
+      this.created;
     },
     cancel() {
       this.$Message.info("你取消了操作");
@@ -152,13 +159,11 @@ export default {
       url: "http://192.168.43.138:9000/user/"
     })
       .then(res => {
-        (this.userInfo.userName = res.data.userName),
-          (this.userInfo.nickName = res.data.nickName),
-          (this.userInfo.phoneNumber = res.data.phone),
-          (this.userInfo.email = res.data.email),
-          (this.userInfo.myicon = `http://192.168.43.138:9000/${
-            res.data.image
-          }`);
+        this.userInfo.userName = res.data.userName;
+        this.userInfo.nickName = res.data.nickName;
+        this.userInfo.phoneNumber = res.data.phone;
+        this.userInfo.email = res.data.email;
+        this.userInfo.myicon = `http://192.168.43.138:9000/${res.data.image}`;
       })
       .catch(err => {
         [];
