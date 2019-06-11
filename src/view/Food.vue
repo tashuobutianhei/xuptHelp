@@ -2,8 +2,8 @@
   <div class="all">
     <Tabs :value="TabsValue" class="content">
       <TabPane label="待领取订单" name="wait">
-        <div v-if="foodTaskList.length==0" class ="no" >
-          <img src="../assets/img/no.png" >
+        <div v-if="foodTaskList.length==0" class="no">
+          <img src="../assets/img/no.png">
           <p>还没有人发布哦</p>
         </div>
         <FoodTask
@@ -13,7 +13,6 @@
           class="task"
           type="order"
           :status="item.status"
-          @getOrder="getOrder"
         ></FoodTask>
       </TabPane>
       <TabPane label="我的足迹" name="my">
@@ -58,14 +57,10 @@
     </Tooltip>
 
     <Tooltip content="刷新" placement="top" class="refishbutton">
-      <Button shape="circle" icon="md-refresh" @click="refresh"></Button>
+      <Button shape="circle" icon="md-refresh" @click="refreshAll"></Button>
     </Tooltip>
 
     <FoodOrderModal :modalVisble="modalVisble" @close="close"></FoodOrderModal>
-
-    <Modal v-model="readyModalVisble" title="确认一下" @on-ok="getOrderOk" @on-cancel="getOrderCancel">
-      <p>确认领取了吗？要负责哦！</p>
-    </Modal>
   </div>
 </template>
 <script>
@@ -88,17 +83,21 @@ export default {
       foodTaskOrderList: [], //领取
       modalVisble: false,
       TabsValue: "wait",
-      readyModalVisble: false,
-      wirteVisble: false,
-      foodList: CONST.foodTask.taskList,
-      itId: ""
+
+      wirteVisble: false
+      // foodList: CONST.foodTask.taskList,
+      // itId: ""
     };
   },
   methods: {
+    refreshAll() {
+      this.refresh();
+      this.refreshName();
+    },
     refresh() {
       this.axios({
         method: "get",
-        url: "http://192.168.43.138:9000/task/status"
+        url: "http://192.168.43.138:9000/task/0"
       })
         .then(res => {
           this.foodTaskList = res.data.filter((item, index, array) => {
@@ -119,13 +118,13 @@ export default {
           this.foodTaskSelfList = res.data.filter((item, index, array) => {
             return (
               item.type == "food" &&
-              item.pubUser == this.$store.state.userInfo.username
+              item.pubUser == this.$store.state.userInfo.userName
             );
           });
           this.foodTaskOrderList = res.data.filter((item, index, array) => {
             return (
               item.type == "food" &&
-              item.subUser == this.$store.state.userInfo.username
+              item.subUser == this.$store.state.userInfo.userName
             );
           });
         })
@@ -136,27 +135,7 @@ export default {
     close() {
       this.modalVisble = false;
     },
-    getOrder(it) {
-      this.itId = it.id;
-      this.readyModalVisble = true;
-    },
-    getOrderOk() {
-      //axios 订单领取
-      this.axios({
-        method: "put",
-        url: `http://192.168.43.138:9000/task/${this.itId}`
-      }).then(res => {
-        console.log(res);
-        if (res == "success") {
-          this.refresh();
-          this.$Message.success("领取成功");
-          this.readyModalVisble = false;
-        }
-      });
-    },
-    getOrderCancel() {
-      this.readyModalVisble = false;
-    },
+
     wirteComment() {
       this.TabsValue = "commit";
       this.wirteVisble = true;
@@ -216,6 +195,6 @@ export default {
   width: 20%;
   margin: 100px 50%;
   transform: translateX(-50%);
-  text-align: center
+  text-align: center;
 }
 </style>

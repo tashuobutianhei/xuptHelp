@@ -2,9 +2,10 @@
   <div class="content">
     <Layout>
       <Sider class="menu">
-        <Menu active-name="1" class="menu" style="width:200px">
-          <MenuItem name="1" to="/Manger/MangerCheck">任务审核</MenuItem>
-          <MenuItem name="2" to="/Manger/MangerManger">任务管理</MenuItem>
+        <Menu :active-name="active" class="menu" style="width:200px">
+          <MenuItem name="MangerCheck" to="/Manger/MangerCheck">任务审核</MenuItem>
+          <MenuItem name="MangerManger" to="/Manger/MangerManger">任务管理</MenuItem>
+          <MenuItem name="MangerComment" to="/Manger/MangerComment">评论管理</MenuItem>
         </Menu>
       </Sider>
       <Content>
@@ -17,33 +18,21 @@
 import vueApp from "../main.js";
 import AppVue from "../App.vue";
 import axios from "axios";
-import Tool from '../common/tool.js'
-
+import Tool from "../common/tool.js";
 
 export default {
-  // beforeRouteEnter(to, from, next) {
-  //   axios({
-  //     method: "get",
-  //     url: "http://192.168.43.138:9000/manager/",
-  //     headers: {
-  //       Authorization: `Bearer ${Tool.getCookie("token")}`
-  //     }
-  //   })
-  //     .then(res => {
-  //       console.log(res.data);
-  //       if(res.data == 'success') {
-  //         next()
-  //       } else {
-  //         next('/')
-  //       }
-  //     })
-  //     .catch(err => {
-  //       console.log(err);
-  //       next('/')
-  //     });
-  // },
   data() {
-    return {};
+    return {
+      active:''
+    };
+  },
+  created() {
+    if(window.location.pathname == '/Manger'){
+      this.$router.push('/Manger/MangerCheck');
+      this.active = window.location.pathname.split('/')[2]
+    } else {
+     this.active = window.location.pathname.split('/')[2]
+    }
   }
 };
 </script>

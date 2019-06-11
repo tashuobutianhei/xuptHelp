@@ -51,7 +51,7 @@
           v-if="type=='order' && status==0 "
           icon="md-flag"
           @click="getOrder"
-          :disabled="$store.state.userInfo.username == foodInfo.pubUser"
+          :disabled="$store.state.userInfo.userName == foodInfo.pubUser"
         >马上接单</Button>
 
         <Poptip confirm title="确认收货了吗?" class="orderButton">
@@ -83,12 +83,28 @@
           icon="md-chatboxes"
         >评价</Button>
 
-        <Poptip confirm title="?" class="MangerButton" v-if="status==5 ">
+        <Poptip
+          confirm
+          title="选择相应操作?"
+          class="MangerButton"
+          v-if="type =='manger'"
+          cancel-text="清理"
+          ok-text="下架"
+          @on-ok="down"
+          @on-cancel="clear"
+        >
+          <Button type="warning" icon="md-heart" size="small">操作</Button>
+        </Poptip>
+
+        <!-- <Poptip confirm title="?" class="MangerButton" v-if="status==5">
           <Button type="error" icon="md-heart" size="small">下架</Button>
           <Button type="warning" icon="md-heart" size="small">清理</Button>
-        </Poptip>
+        </Poptip>-->
       </Col>
     </Row>
+    <Modal v-model="readyModalVisble" title="确认一下" @on-ok="getOrderOk" @on-cancel="getOrderCancel">
+      <p>确认领取了吗？要负责哦！</p>
+    </Modal>
   </div>
 </template>
 <script>
@@ -103,12 +119,61 @@ export default {
     return {
       time: new Date(),
       money: 12,
-      pay: 2
+      pay: 2,
+      readyModalVisble: false,
     };
   },
   methods: {
+    down() {
+      this.axios({
+        url: `http://192.168.43.138:9000/manager/${this.foodInfo.taskId}`,
+        method: "put"
+      })
+        .then(res => {
+          if (res.data == "success") {
+            this.$Message.success("操作成功");
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    clear() {
+      this.axios({
+        url: `http://192.168.43.138:9000/manager/${this.foodInfo.taskId}`,
+        method: "delete"
+      })
+        .then(res => {
+          if (res.data == "success") {
+            this.$Message.success("操作成功");
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    // getOrder() {
+    //   this.$emit("getOrder", { id:  });
+    // },
     getOrder() {
-      this.$emit("getOrder", { id: this.foodInfo.taskId });
+      this.readyModalVisble = true;
+    },
+    getOrderOk() {
+      //axios 订单领取
+      this.axios({
+        method: "put",
+        url: `http://192.168.43.138:9000/task/${this.foodInfo.taskId}`
+      }).then(res => {
+        console.log(res);
+        if (res == "success") {
+          this.refresh();
+          this.$Message.success("领取成功");
+          this.readyModalVisble = false;
+        }
+      });
+    },
+    getOrderCancel() {
+      this.readyModalVisble = false;
     },
     outOrder() {
       this.axios({
@@ -117,7 +182,7 @@ export default {
       })
         .then(res => {
           this.$Message.success("退单成功");
-          this.foodInfo.status = -1;
+          this.foodInfo.status = 3;
         })
         .catch(err => {
           console.log(err);

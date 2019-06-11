@@ -22,7 +22,11 @@
         <p>{{item.content}}</p>
       </Row>
       <span class="replay" @click="replay(item)">回复</span>
-      <span class="delete" @click="deleteIt(item)"  v-if="store.state.userInfo.username == item.user">删除</span>
+      <span
+        class="delete"
+        @click="deleteIt(item)"
+        v-if="$store.state.userInfo.userName == item.user"
+      >删除</span>
     </div>
     <div class="replayArea" v-if="commentVisble || wirteVisble || replayVisble">
       <Input type="textarea" v-model="comment" placeholder="说些什么" on-keydown="nobackspace"/>
@@ -53,12 +57,14 @@ export default {
     }
   },
   created() {
-    this.axios({
-      url: "http://192.168.43.138:9000/comment/" + this.taskId,
-      method: "get"
-    }).then(res => {
-      this.commitList = res.data;
-    });
+    if (this.taskId) {
+      this.axios({
+        url: "http://192.168.43.138:9000/comment/" + this.taskId,
+        method: "get"
+      }).then(res => {
+        this.commitList = res.data;
+      });
+    }
   },
   methods: {
     replay(item) {
@@ -69,9 +75,15 @@ export default {
     },
     deleteIt(item) {
       this.axios({
-        url: "http://192.168.43.138:9000/comment/"+this.taskId,
-        method: "delete",
-      }).then();
+        url: "http://192.168.43.138:9000/comment/" + item.commentId,
+        method: "delete"
+      })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     nobackspace(e) {
       console.log(111);
@@ -83,7 +95,7 @@ export default {
         url: "http://192.168.43.138:9000/comment/",
         method: "post",
         data: {
-          user: this.$store.state.userInfo.username,
+          user: this.$store.state.userInfo.userName,
           taskId: this.taskId,
           time: new Date().getTime(),
           content: this.comment
@@ -91,7 +103,7 @@ export default {
       }).then(res => {
         if (res.data == "success") {
           this.commitList.push({
-            nickName: this.$store.state.userInfo.username,
+            nickName: this.$store.state.userInfo.userName,
             comment: this.comment,
             time: new Date()
           });

@@ -27,7 +27,7 @@
             <Avatar style="color: #f56a00;background-color: #fde3cf">U</Avatar>
             <Dropdown trigger="click" style="margin-left: 20px">
               <a href="javascript:void(0)">
-                {{$store.state.userInfo.nickname}}
+                {{$store.state.userInfo.nickname ? $store.state.userInfo.nickname :'设置一个好的昵称吧'}}
                 <Icon type="ios-arrow-down"></Icon>
               </a>
               <DropdownMenu slot="list">
@@ -87,10 +87,17 @@ export default {
     let username = Tool.getCookie("username");
     if (token) {
       //登录态
-      this.$store.commit("login", {
-        username: username,
-        nickname: "一个昵称"
-      });
+
+      this.axios({
+        method: "get",
+        url: "http://192.168.43.138:9000/user/"
+      })
+        .then(res => {
+          this.$store.commit("login", res.data);
+        })
+        .catch(err => {
+          console.log(err)
+        });
 
       this.axios({
         method: "get",

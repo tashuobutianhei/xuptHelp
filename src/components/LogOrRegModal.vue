@@ -192,8 +192,8 @@ export default {
               this.$Message.success("登录成功!");
 
               this.$store.commit("login", {
-                username: this.formLogin.username,
-                nickname: "1111"
+                userName: this.formLogin.username,
+                nickName: "1111"
               });
 
               this.$refs["formLogin"].resetFields();

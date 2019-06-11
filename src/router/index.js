@@ -11,6 +11,7 @@ import MycenterBody1 from '@/view/MycenterBody1'
 import MycenterBody2 from '@/view/MycenterBody2'
 import MangerCheck from '@/view/MangerCheck.vue'
 import MangerManger from '@/view/MangerManger.vue'
+import MangerComment from '@/view/MangerComment.vue'
 
 Vue.use(Router)
 
@@ -45,7 +46,11 @@ export default new Router({
             path: 'MangerManger',
             name: 'MangerManger',
             component: MangerManger,
-        },
+        }, {
+            path: 'MangerComment',
+            name: 'MangerComment',
+            component: MangerComment,
+        }
         ]
     },
     {

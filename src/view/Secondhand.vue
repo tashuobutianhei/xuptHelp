@@ -2,18 +2,17 @@
   <div class="all">
     <Tabs :value="TabsValue" class="content">
       <TabPane label="待领取快递" name="wait">
-         <div v-if="handTaskList.length==0" class ="no" >
-          <img src="../assets/img/no.png" >
+        <div v-if="handTaskList.length==0" class="no">
+          <img src="../assets/img/no.png">
           <p>还没有人发布哦</p>
         </div>
         <SecondHandTask
-          v-for="(item,index) in handTaskList"
+          v-for="item in handTaskList"
           :key="item.taskId"
           :Info="item"
           class="task"
           type="order"
           :status="item.status"
-          @getOrder="getOrder"
         ></SecondHandTask>
       </TabPane>
 
@@ -22,29 +21,25 @@
           <Col span="12" class="myeat">
             <P>我的出售</P>
             <SecondHandTask
-              v-for="(item,index) in List"
-              v-if="index != 3"
-              :key="index"
+              v-for="item in handTaskSelfList"
+              :key="item.taskId"
               :Info="item"
               class="task"
               type="release"
               :status="index"
               :rowStyle="1"
-              @getOrder="getOrder"
             ></SecondHandTask>
           </Col>
           <Col span="12" class="myget">
             <P>我的购买</P>
             <SecondHandTask
-              v-for="(item,index) in List"
-              v-if="index != 0"
-              :key="index"
+              v-for="item in handTaskOrderList"
+              :key="item.taskId"
               :Info="item"
               class="task"
               type="order"
               :status="index"
               :rowStyle="1"
-              @getOrder="getOrder"
             ></SecondHandTask>
           </Col>
         </Row>
@@ -60,12 +55,10 @@
     <Tooltip content="有什么要说的" placement="top" class="writebutton">
       <Button type="success" shape="circle" icon="md-clipboard" @click="wirteComment"></Button>
     </Tooltip>
-
+    <Tooltip content="刷新" placement="top" class="refishbutton">
+      <Button shape="circle" icon="md-refresh" @click="refresh"></Button>
+    </Tooltip>
     <SecondhandModal :modalVisble="modalVisble" @close="close"></SecondhandModal>
-
-    <Modal v-model="readyModalVisble" title="确认一下" @on-ok="getOrderOk" @on-cancel="getOrderCancel">
-      <p>确认领取了吗？要负责哦！</p>
-    </Modal>
   </div>
 </template>
 <script>
@@ -87,20 +80,22 @@ export default {
   },
   data() {
     return {
-      handTaskList:[],
-      List: CONST.secondHandTask.secondHandTaskList,
+      handTaskList: [], //待领取
+      handTaskSelfList: [], //发布
+      handTaskOrderList: [], //领取
+
+      // List: CONST.secondHandTask.secondHandTaskList,
       modalVisble: false,
       TabsValue: "wait",
-      readyModalVisble: false,
-      wirteVisble: false,
-      mailList: CONST.mailTask
+      wirteVisble: false
+      // mailList: CONST.mailTask
     };
   },
   methods: {
     refresh() {
       this.axios({
         method: "get",
-        url: "http://192.168.43.138:9000/task/status"
+        url: "http://192.168.43.138:9000/task/0"
       })
         .then(res => {
           this.handTaskList = res.data.filter((item, index, array) => {
@@ -111,20 +106,34 @@ export default {
           console.log(err);
         });
     },
+    refreshName() {
+      this.axios({
+        method: "get",
+        url: "http://192.168.43.138:9000/task/name"
+      })
+        .then(res => {
+          console.log();
+          this.handTaskSelfList = res.data.filter((item, index, array) => {
+            return (
+              item.type == "trade" &&
+              item.pubUser == this.$store.state.userInfo.userName
+            );
+          });
+          this.handTaskOrderList = res.data.filter((item, index, array) => {
+            return (
+              item.type == "trade" &&
+              item.subUser == this.$store.state.userInfo.userName
+            );
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     close() {
       this.modalVisble = false;
     },
-    getOrder() {
-      this.readyModalVisble = true;
-    },
-    getOrderOk() {
-      //axios 订单领取
-      this.$Message.success("领取成功");
-      this.readyModalVisble = false;
-    },
-    getOrderCancel() {
-      this.readyModalVisble = false;
-    },
+
     wirteComment() {
       this.TabsValue = "commit";
       this.wirteVisble = true;
@@ -133,8 +142,8 @@ export default {
       this.wirteVisble = false;
     }
   },
-  created(){
-    this.refresh()
+  created() {
+    this.refresh();
   }
 };
 </script>
@@ -163,6 +172,11 @@ export default {
 }
 .writebutton {
   position: fixed;
+  top: 200px;
+  right: 50px;
+}
+.refishbutton {
+  position: fixed;
   top: 150px;
   right: 50px;
 }
@@ -179,6 +193,6 @@ export default {
   width: 20%;
   margin: 100px 50%;
   transform: translateX(-50%);
-  text-align: center
+  text-align: center;
 }
 </style>

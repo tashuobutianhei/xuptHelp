@@ -73,13 +73,27 @@
           v-if="type=='release' && status==2 "
           icon="md-chatboxes"
         >评价</Button>
-
-        <Poptip confirm title="?" class="MangerButton" v-if="status==5 ">
+        <Poptip
+          confirm
+          title="选择相应操作?"
+          class="MangerButton"
+          v-if="type =='manger'"
+          cancel-text="清理"
+          ok-text="下架"
+          @on-ok="down"
+          @on-cancel="clear"
+        >
+          <Button type="warning" icon="md-heart" size="small">操作</Button>
+        </Poptip>
+        <!-- <Poptip confirm title="?" class="MangerButton" v-if="status==5 ">
           <Button type="error" icon="md-heart" size="small">下架</Button>
           <Button type="warning" icon="md-heart" size="small">清理</Button>
-        </Poptip>
+        </Poptip>-->
       </Col>
     </Row>
+    <Modal v-model="readyModalVisble" title="确认一下" @on-ok="getOrderOk" @on-cancel="getOrderCancel">
+      <p>确认领取了吗？要负责哦！</p>
+    </Modal>
   </div>
 </template>
 <script>
@@ -94,30 +108,89 @@ export default {
     return {
       time: new Date(),
       money: 12,
-      pay: 2
+      pay: 2,
+      readyModalVisble: false
     };
   },
-  //   computed: {
-  //     mailContent() {
-  //       if (this.status == 0) {
-  //         return this.mailInfo.content.replace(/[0-9]/g, "*");
-  //       } else {
-  //         return this.mailInfo.content;
-  //       }
-  //     }
-  //   },
+
   methods: {
-    getOrder() {
-      this.$emit("getOrder", {});
+    down() {
+      this.axios({
+        url: `http://192.168.43.138:9000/manager/${this.mailInfo.taskId}`,
+        method: "put"
+      })
+        .then(res => {
+          if (res.data == "success") {
+            this.$Message.success("操作成功");
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    clear() {
+      this.axios({
+        url: `http://192.168.43.138:9000/manager/${this.mailInfo.taskId}`,
+        method: "delete"
+      })
+        .then(res => {
+          if (res.data == "success") {
+            this.$Message.success("操作成功");
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     outOrder() {
-      this.$Message.success("退单成功");
+      this.axios({
+        method: "post",
+        url: "http://192.168.43.138:9000/task/" + this.mailInfo.taskId
+      })
+        .then(res => {
+          this.$Message.success("退单成功");
+          this.mailInfo.status = 3;
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     getMyOrder() {
-      this.$Message.success("收货成功！");
+      this.axios({
+        method: "delete",
+        url: "http://192.168.43.138:9000/task/" + this.mailInfo.taskId
+      })
+        .then(res => {
+          this.$Message.success("收货成功！");
+          this.mailInfo.status = 2;
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     readyOrder() {
       this.$Message.success("订单完成！");
+    },
+    getOrder() {
+      this.readyModalVisble = true;
+    },
+    getOrderOk() {
+      //axios 订单领取
+      this.axios({
+        method: "put",
+        url: `http://192.168.43.138:9000/task/${this.mailInfo.taskId}`
+      }).then(res => {
+        console.log(res);
+        if (res == "success") {
+          this.refresh();
+          this.$Message.success("领取成功");
+          this.readyModalVisble = false;
+        }
+      });
+      this.readyModalVisble = false;
+    },
+    getOrderCancel() {
+      this.readyModalVisble = false;
     },
     transform(it) {
       if (this.status == 0 && this.type !== "release") {

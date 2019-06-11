@@ -85,15 +85,19 @@
         </Col>
         <Col span="24" class="adiv">
           <p class="title">二手交易({{handList.length}}件物品)</p>
-          <MailTask
-            v-for="item in mailList"
+          <div v-if="mailList.length==0" class="no">
+            <img src="../assets/img/no.png">
+            <p>还没有人发布哦</p>
+          </div>
+          <HandTask
+            v-for="(item,index) in mailList"
             :key="item.taskId"
+            :Info="item"
             class="task"
             type="order"
             :status="item.status"
             @getOrder="getOrder"
-            :mailInfo="item"
-          ></MailTask>
+          ></HandTask>
           <p class="foot">
             查看全部
             <Icon type="ios-arrow-down"/>
@@ -113,7 +117,7 @@
     <FoodOrderModal :modalVisble="foodmodalVisble" @close="foodclose"></FoodOrderModal>
     <MailOrderModal :modalVisble="mailmodalVisble" @close="emailclose"></MailOrderModal>
     <HandOrderModal :modalVisble="handmodalVisble" @close="handClose"></HandOrderModal>
-   </div>
+  </div>
 </template>
 <script>
 import FoodTask from "../components/FoodTask";
@@ -160,42 +164,20 @@ export default {
     handClose() {
       this.handmodalVisble = false;
     },
-    refreshFood() {
+    refreshTask() {
       this.axios({
         method: "get",
-        url: "http://192.168.43.138:9000/task/status"
+        url: "http://192.168.43.138:9000/task/0"
       })
         .then(res => {
-          this.FoodTask = res.data.filter((item, index, array) => {
+          this.foodList = res.data.filter((item, index, array) => {
             return item.type == "food";
           });
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    },
-    refreshMail() {
-      this.axios({
-        method: "get",
-        url: "http://192.168.43.138:9000/task/status"
-      })
-        .then(res => {
-          this.mailList = res.data.filter((item, index, array) => {
-            return item.type == "express";
-          });
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    },
-    refreshHand() {
-      this.axios({
-        method: "get",
-        url: "http://192.168.43.138:9000/task/status"
-      })
-        .then(res => {
           this.handList = res.data.filter((item, index, array) => {
             return item.type == "trade";
+          });
+          this.mailList = res.data.filter((item, index, array) => {
+            return item.type == "express";
           });
         })
         .catch(err => {
@@ -204,9 +186,7 @@ export default {
     }
   },
   created() {
-    this.refreshFood();
-    this.refreshMail();
-    this.refreshHand();
+    this.refreshTask();
   }
 };
 </script>
@@ -348,6 +328,6 @@ export default {
   text-align: center;
 }
 .no img {
-  width: 100%;
+  width: 50%;
 }
 </style>

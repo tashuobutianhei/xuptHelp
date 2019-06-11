@@ -12,7 +12,6 @@
           class="task"
           type="order"
           :status="item.status"
-          @getOrder="getOrder"
           :mailInfo="item"
         ></MailTask>
       </TabPane>
@@ -60,10 +59,6 @@
     </Tooltip>
 
     <MailOrderModal :modalVisble="modalVisble" @close="close"></MailOrderModal>
-
-    <Modal v-model="readyModalVisble" title="确认一下" @on-ok="getOrderOk" @on-cancel="getOrderCancel">
-      <p>确认领取了吗？要负责哦！</p>
-    </Modal>
   </div>
 </template>
 <script>
@@ -86,16 +81,15 @@ export default {
       mailTaskOrderList: [],
       modalVisble: false,
       TabsValue: "wait",
-      readyModalVisble: false,
       wirteVisble: false,
-      mailList: CONST.mailTask
+      // mailList: CONST.mailTask,
     };
   },
   methods: {
     refresh() {
       this.axios({
         method: "get",
-        url: "http://192.168.43.138:9000/task/status"
+        url: "http://192.168.43.138:9000/task/0"
       })
         .then(res => {
           this.mailTaskList = res.data.filter((item, index, array) => {
@@ -115,13 +109,13 @@ export default {
           this.mailTaskSelfList = res.data.filter((item, index, array) => {
             return (
               item.type == "express" &&
-              item.pubUser == this.$store.state.userInfo.username
+              item.pubUser == this.$store.state.userInfo.userName
             );
           });
           this.mailTaskOrderList = res.data.filter((item, index, array) => {
             return (
               item.type == "express" &&
-              item.subUser == this.$store.state.userInfo.username
+              item.subUser == this.$store.state.userInfo.userName
             );
           });
         })
@@ -132,17 +126,7 @@ export default {
     close() {
       this.modalVisble = false;
     },
-    getOrder() {
-      this.readyModalVisble = true;
-    },
-    getOrderOk() {
-      //axios 订单领取
-      this.$Message.success("领取成功");
-      this.readyModalVisble = false;
-    },
-    getOrderCancel() {
-      this.readyModalVisble = false;
-    },
+
     wirteComment() {
       this.TabsValue = "commit";
       this.wirteVisble = true;
