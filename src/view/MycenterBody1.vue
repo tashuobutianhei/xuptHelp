@@ -53,7 +53,7 @@
       </div>
     </Card>
 
-    <Card :bordered="false" :padding="16" style="margin-top:2px">
+    <Card :bordered="false" :padding="16" style="margin-top:2px;margin-bottom:2px">
       <p slot="title">邮箱地址</p>
       <div style="display:flex">
         <div class="cardcontent">
@@ -143,17 +143,33 @@ export default {
         if (res.data == "success") {
           this.$Message.success("修改成功");
           this.$emit("close");
+          this.reset();
         }
       });
       this.myicon = "";
-      this.created;
     },
     cancel() {
       this.$Message.info("你取消了操作");
+    },
+    reset() {
+      this.axios({
+        method: "get",
+        url: "http://192.168.43.138:9000/user/"
+      })
+        .then(res => {
+          this.userInfo.userName = res.data.userName;
+          this.userInfo.nickName = res.data.nickName;
+          this.userInfo.phoneNumber = res.data.phone;
+          this.userInfo.email = res.data.email;
+          this.userInfo.myicon = `http://192.168.43.138:9000/${res.data.image}`;
+        })
+        .catch(err => {
+          [];
+        });
     }
   },
 
-  created() {
+  mounted() {
     this.axios({
       method: "get",
       url: "http://192.168.43.138:9000/user/"

@@ -4,7 +4,7 @@
       <Sider class="menu">
         <Menu active-name="1" class="menu" style="width:200px">
           <MenuItem name="1" to="/Mycenter/MycenterBody1">个人信息</MenuItem>
-          <MenuItem name="2" to="/Mycenter/MycenterBody2">任务记录</MenuItem>
+          <!-- <MenuItem name="2" to="/Mycenter/MycenterBody2">任务记录</MenuItem> -->
         </Menu>
       </Sider>
       <Content>
@@ -23,7 +23,7 @@ export default {
 </script>
 <style scoped>
 .content {
-  min-height: 623px;
+  /* min-height: 623px;  */
 }
 .menu {
   background-color: white;
