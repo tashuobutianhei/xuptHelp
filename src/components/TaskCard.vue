@@ -1,7 +1,6 @@
 <template>
   <Card>
-    <p slot="title">{{ info[0].type }}</p>
-    <a href="#" slot="extra" @click.prevent="changeLimit">翻页</a>
+    <a href="#" slot="extra" @click.prevent="changeLimit">全部任务</a>
     <ul>
       <li v-for="item in info" :key="item.id" style="list-style-type:none">
         <a :href="item.url" target="_blank">{{ item.name }}</a>

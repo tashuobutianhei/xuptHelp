@@ -1,6 +1,11 @@
 <template>
   <div class="bodycontent">
-    <Row>
+    <Tabs value="name1">
+      <TabPane label="校园外卖" name="name1"><foodtaskcard></foodtaskcard></TabPane>
+      <TabPane label="快递代取" name="name2"><mailtaskcard></mailtaskcard></TabPane>
+      <TabPane label="二手交易" name="name3"><secondhandtaskcard></secondhandtaskcard></TabPane>
+    </Tabs>
+    <!-- <Row>
       <Col span="8">
         <taskcard :info="foodList"></taskcard>
       </Col>
@@ -10,11 +15,17 @@
       <Col span="8">
         <taskcard :info="secondhandList"></taskcard>
       </Col>
-    </Row>
+    </Row>-->
   </div>
 </template>
 <script>
 import taskcard from "../components/TaskCard";
+
+import foodtaskcard from "../components/FoodTaskcard";
+import mailtaskcard from "../components/MailTaskcard";
+import secondhandtaskcard from "../components/SecondhandTaskcard";
+
+
 
 export default {
   data() {
@@ -112,7 +123,11 @@ export default {
     };
   },
   components: {
-    taskcard
+    taskcard,
+
+    mailtaskcard,
+    foodtaskcard,
+    secondhandtaskcard
   }
 };
 </script>
