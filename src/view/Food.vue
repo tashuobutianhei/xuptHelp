@@ -13,6 +13,7 @@
           class="task"
           type="order"
           :status="item.status"
+          @refresh="refreshAll"
         ></FoodTask>
       </TabPane>
       <TabPane label="我的足迹" name="my">
@@ -26,6 +27,7 @@
               class="mytask"
               type="release"
               :status="item.status"
+              @refresh="refreshAll"
             ></FoodTask>
             <!-- <FoodTask class="mytask" type="release" status="1"></FoodTask>
             <FoodTask class="mytask" type="release" status="2"></FoodTask>-->
@@ -39,6 +41,7 @@
               class="mytask"
               type="order"
               :status="item.status"
+              @refresh="refreshAll"
             ></FoodTask>
             <!-- <FoodTask class="mytask" type="order" status="2"></FoodTask> -->
           </Col>
@@ -60,7 +63,7 @@
       <Button shape="circle" icon="md-refresh" @click="refreshAll"></Button>
     </Tooltip>
 
-    <FoodOrderModal :modalVisble="modalVisble" @close="close"></FoodOrderModal>
+    <FoodOrderModal :modalVisble="modalVisble" @close="close" @refresh="refreshAll"></FoodOrderModal>
   </div>
 </template>
 <script>
@@ -93,6 +96,8 @@ export default {
     refreshAll() {
       this.refresh();
       this.refreshName();
+      // this.$Message.info("Clicked cancel");
+      this.$Message.info("任务更新");
     },
     refresh() {
       this.axios({
@@ -145,8 +150,7 @@ export default {
     }
   },
   created() {
-    this.refresh();
-    this.refreshName();
+    this.refreshAll();
   }
 };
 </script>

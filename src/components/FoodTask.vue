@@ -7,7 +7,7 @@
       </Col>
       <Col>
         <div class="itme">
-          <Time :time="time"/>
+          <Time :time="foodInfo.timer"/>
         </div>
       </Col>
     </Row>
@@ -120,7 +120,7 @@ export default {
       time: new Date(),
       money: 12,
       pay: 2,
-      readyModalVisble: false,
+      readyModalVisble: false
     };
   },
   methods: {
@@ -132,6 +132,7 @@ export default {
         .then(res => {
           if (res.data == "success") {
             this.$Message.success("操作成功");
+            this.$emit("refresh");
           }
         })
         .catch(err => {
@@ -146,6 +147,7 @@ export default {
         .then(res => {
           if (res.data == "success") {
             this.$Message.success("操作成功");
+            this.$emit("refresh");
           }
         })
         .catch(err => {
@@ -165,8 +167,8 @@ export default {
         url: `http://192.168.43.138:9000/task/${this.foodInfo.taskId}`
       }).then(res => {
         console.log(res);
-        if (res == "success") {
-          this.refresh();
+        if (res.data == "success") {
+          this.$emit("refresh");
           this.$Message.success("领取成功");
           this.readyModalVisble = false;
         }
@@ -183,6 +185,7 @@ export default {
         .then(res => {
           this.$Message.success("退单成功");
           this.foodInfo.status = 3;
+          this.$emit("refresh");
         })
         .catch(err => {
           console.log(err);
@@ -195,6 +198,7 @@ export default {
       })
         .then(res => {
           this.$Message.success("收货成功！");
+          this.$emit("refresh");
           this.foodInfo.status = 2;
         })
         .catch(err => {
@@ -203,6 +207,7 @@ export default {
     },
     readyOrder() {
       this.$Message.success("订单完成！");
+      this.$emit("refresh");
     },
     transform(it) {
       if (this.status == 0 && this.type !== "release") {

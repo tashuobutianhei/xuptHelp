@@ -13,6 +13,7 @@
           type="order"
           :status="item.status"
           :mailInfo="item"
+          @refresh="refreshAll"
         ></MailTask>
       </TabPane>
 
@@ -27,6 +28,7 @@
               type="release"
               :status="item.status"
               :mailInfo="item"
+              @refresh="refreshAll"
             ></MailTask>
           </Col>
           <Col span="12" class="myget">
@@ -38,6 +40,7 @@
               type="order"
               :status="item.status"
               :mailInfo="item"
+              @refresh="refreshAll"
             ></MailTask>
           </Col>
         </Row>
@@ -58,7 +61,7 @@
       <Button type="success" shape="circle" icon="md-clipboard" @click="wirteComment"></Button>
     </Tooltip>
 
-    <MailOrderModal :modalVisble="modalVisble" @close="close"></MailOrderModal>
+    <MailOrderModal :modalVisble="modalVisble" @close="close" @refresh="refreshAll"></MailOrderModal>
   </div>
 </template>
 <script>
@@ -81,14 +84,15 @@ export default {
       mailTaskOrderList: [],
       modalVisble: false,
       TabsValue: "wait",
-      wirteVisble: false,
+      wirteVisble: false
       // mailList: CONST.mailTask,
     };
   },
   methods: {
-    refreshAll(){
+    refreshAll() {
       this.refresh();
-      this.refreshName()
+      this.refreshName();
+      this.$Message.info("任务更新");
     },
     refresh() {
       this.axios({
@@ -140,7 +144,7 @@ export default {
     }
   },
   created() {
-    this.refreshAll()
+    this.refreshAll();
   }
 };
 </script>

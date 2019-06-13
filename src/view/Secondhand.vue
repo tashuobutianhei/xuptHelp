@@ -13,6 +13,7 @@
           class="task"
           type="order"
           :status="item.status"
+          @refresh="refreshAll"
         ></SecondHandTask>
       </TabPane>
 
@@ -28,6 +29,7 @@
               type="release"
               :status="item.status"
               :rowStyle="1"
+              @refresh="refreshAll"
             ></SecondHandTask>
           </Col>
           <Col span="12" class="myget">
@@ -40,6 +42,7 @@
               type="order"
               :status="item.status"
               :rowStyle="1"
+              @refresh="refreshAll"
             ></SecondHandTask>
           </Col>
         </Row>
@@ -58,7 +61,7 @@
     <Tooltip content="刷新" placement="top" class="refishbutton">
       <Button shape="circle" icon="md-refresh" @click="refreshAll"></Button>
     </Tooltip>
-    <SecondhandModal :modalVisble="modalVisble" @close="close"></SecondhandModal>
+    <SecondhandModal :modalVisble="modalVisble" @close="close" @refresh="refreshAll"></SecondhandModal>
   </div>
 </template>
 <script>
@@ -95,6 +98,7 @@ export default {
     refreshAll() {
       this.refresh();
       this.refreshName();
+      this.$Message.info("任务更新");
     },
     refresh() {
       this.axios({

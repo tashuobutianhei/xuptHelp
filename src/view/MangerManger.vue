@@ -8,7 +8,7 @@
         </div>
         <Row class="row" :gutter="8">
           <Col :span="6" v-for="(item,index) in FoodList" :key="index" class="col">
-            <FoodTask :key="item.taskId" :foodInfo="item" type="manger"></FoodTask>
+            <FoodTask :key="item.taskId" :foodInfo="item" type="manger" @refresh="getTask"></FoodTask>
           </Col>
         </Row>
       </TabPane>
@@ -19,7 +19,7 @@
         </div>
         <Row class="row" :gutter="8">
           <Col :span="6" v-for="(item,index) in MailList" :key="index" class="col">
-            <MailTask :key="index" type="manger" :mailInfo="item"></MailTask>
+            <MailTask :key="index" type="manger" :mailInfo="item"  @refresh="getTask"></MailTask>
           </Col>
         </Row>
       </TabPane>
@@ -30,7 +30,7 @@
         </div>
         <Row class="row" :gutter="8">
           <Col :span="6" v-for="(item,index) in HandList" :key="index" class="col">
-            <SecondHandTask :Info="item" type="manger" :rowStyle="1"></SecondHandTask>
+            <SecondHandTask :Info="item" type="manger" :rowStyle="1"  @refresh="getTask"></SecondHandTask>
           </Col>
         </Row>
       </TabPane>
@@ -78,6 +78,8 @@ export default {
           this.MailList = res.data.filter((item, index, array) => {
             return item.type == "express";
           });
+                this.$Message.info("任务更新");
+
         })
         .catch(err => {
           console.log(err);

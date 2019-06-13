@@ -9,7 +9,7 @@
       </Col>
       <Col>
         <div class="itme">
-          <Time :time="time"/>
+          <Time :time="Info.timer"/>
         </div>
       </Col>
     </Row>
@@ -65,6 +65,13 @@
         </Poptip>
 
         <Button type="warning" class="orderButton" v-if="type=='order' && status==2 ">待评论</Button>
+
+        <Button
+          type="warning"
+          class="orderButton"
+          v-if="type=='release' && status==-1 "
+          disabled
+        >待审核</Button>
 
         <Poptip confirm title="确认退单吗?" @on-ok="outOrder" class="orderButton">
           <Button type="primary" v-if="type=='release' && status==0 " icon="md-clock">等待买家</Button>
@@ -184,6 +191,7 @@ export default {
         .then(res => {
           if (res.data == "success") {
             this.$Message.success("操作成功");
+            this.$emit("refresh");
           }
         })
         .catch(err => {
@@ -198,6 +206,7 @@ export default {
         .then(res => {
           if (res.data == "success") {
             this.$Message.success("操作成功");
+            this.$emit("refresh");
           }
         })
         .catch(err => {
@@ -217,6 +226,7 @@ export default {
           if (res.data == success) {
             this.Ifcheck = true;
             this.$Message.success("审核成功");
+            this.$emit("refresh");
           }
         })
         .catch(err => {
@@ -235,6 +245,8 @@ export default {
         .then(res => {
           if (res.data == success) {
             this.$Message.success("审核成功");
+            this.$emit("refresh");
+
             this.Ifcheck = true;
           }
         })
@@ -253,9 +265,11 @@ export default {
         url: `http://192.168.43.138:9000/task/${this.Info.taskId}`
       }).then(res => {
         console.log(res);
-        if (res == "success") {
+        if (res.data == "success") {
           this.refresh();
           this.$Message.success("下单成功");
+          this.$emit("refresh");
+
           this.readyModalVisble = false;
         }
       });
@@ -271,6 +285,8 @@ export default {
       })
         .then(res => {
           this.$Message.success("退单成功");
+          this.$emit("refresh");
+
           this.Info.status = 3;
         })
         .catch(err => {
@@ -284,6 +300,8 @@ export default {
       })
         .then(res => {
           this.$Message.success("收货成功！");
+          this.$emit("refresh");
+
           this.Info.status = 2;
         })
         .catch(err => {
@@ -292,6 +310,7 @@ export default {
     },
     readyOrder() {
       this.$Message.success("订单完成！");
+      this.$emit("refresh");
     },
     transform(it) {
       if (this.status == 0 && this.type !== "release") {

@@ -9,7 +9,7 @@
       :mask-closable="false"
     >
       <div slot="footer">
-        <Button type="primary" size="large" long  @click="ok">确认添加</Button>
+        <Button type="primary" size="large" long @click="ok">确认添加</Button>
       </div>
       <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
         <FormItem label="地址" prop="address">
@@ -135,13 +135,15 @@ export default {
             }).then(res => {
               if (res.data == "success") {
                 this.$Message.success("添加成功!");
+                this.$emit("refresh");
+
                 this.$emit("close");
-                this.handleReset(name)
+                this.handleReset(name);
               }
             });
           } else {
             this.$Message.error("先登录吧!");
-            this.handleReset(name)
+            this.handleReset(name);
           }
         } else {
           this.$Message.error("存在错误信息o!");
