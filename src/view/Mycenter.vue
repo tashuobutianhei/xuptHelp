@@ -17,7 +17,11 @@
 </template>
 <script>
 export default {
-
+  created(){
+    if(window.location.pathname == '/Mycenter') {
+      this.$router.push('/Mycenter/MycenterBody1')
+    }
+  }
 
 };
 </script>
