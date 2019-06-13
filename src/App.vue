@@ -24,10 +24,10 @@
           </div>
 
           <div v-if="$store.state.islogin" class="avatar">
-            <Avatar style="color: #f56a00;background-color: #fde3cf">U</Avatar>
+            <Avatar style="color: #f56a00;background-color: #fde3cf" :src="$store.state.userInfo.image ? `http://192.168.43.138:9000/${$store.state.userInfo.image}` :''">U</Avatar>
             <Dropdown trigger="click" style="margin-left: 20px">
               <a href="javascript:void(0)">
-                {{$store.state.userInfo.nickname ? $store.state.userInfo.nickname :'设置一个好的昵称吧'}}
+                {{$store.state.userInfo.nickName ? $store.state.userInfo.nickName :'设置一个好的昵称吧'}}
                 <Icon type="ios-arrow-down"></Icon>
               </a>
               <DropdownMenu slot="list">

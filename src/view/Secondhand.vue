@@ -26,7 +26,7 @@
               :Info="item"
               class="task"
               type="release"
-              :status="index"
+              :status="item.status"
               :rowStyle="1"
             ></SecondHandTask>
           </Col>
@@ -38,7 +38,7 @@
               :Info="item"
               class="task"
               type="order"
-              :status="index"
+              :status="item.status"
               :rowStyle="1"
             ></SecondHandTask>
           </Col>
@@ -56,7 +56,7 @@
       <Button type="success" shape="circle" icon="md-clipboard" @click="wirteComment"></Button>
     </Tooltip>
     <Tooltip content="刷新" placement="top" class="refishbutton">
-      <Button shape="circle" icon="md-refresh" @click="refresh"></Button>
+      <Button shape="circle" icon="md-refresh" @click="refreshAll"></Button>
     </Tooltip>
     <SecondhandModal :modalVisble="modalVisble" @close="close"></SecondhandModal>
   </div>
@@ -92,6 +92,10 @@ export default {
     };
   },
   methods: {
+    refreshAll() {
+      this.refresh();
+      this.refreshName();
+    },
     refresh() {
       this.axios({
         method: "get",
@@ -143,7 +147,7 @@ export default {
     }
   },
   created() {
-    this.refresh();
+    this.refreshAll();
   }
 };
 </script>

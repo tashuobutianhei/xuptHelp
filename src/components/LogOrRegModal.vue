@@ -185,31 +185,34 @@ export default {
           })
             .then(res => {
               console.log(res);
+              if (res.data != "error") {
+                Tool.setCookie("token", res.data);
+                Tool.setCookie("username", this.formLogin.username);
 
-              Tool.setCookie("token", res.data);
-              Tool.setCookie("username", this.formLogin.username);
+                this.$Message.success("登录成功!");
 
-              this.$Message.success("登录成功!");
-
-              this.$store.commit("login", {
-                userName: this.formLogin.username,
-                nickName: "1111"
-              });
-
-              this.$refs["formLogin"].resetFields();
-              this.axios({
-                method: "get",
-                url: "http://192.168.43.138:9000/manager/"
-              })
-                .then(res => {
-                  if (res.data == "success") {
-                    this.$store.commit("changeOauth", "manger");
-                  } else {
-                  }
-                })
-                .catch(err => {
-                  console.log(err);
+                this.$store.commit("login", {
+                  userName: this.formLogin.username,
+                  nickName: "1111"
                 });
+
+                this.$refs["formLogin"].resetFields();
+                this.axios({
+                  method: "get",
+                  url: "http://192.168.43.138:9000/manager/"
+                })
+                  .then(res => {
+                    if (res.data == "success") {
+                      this.$store.commit("changeOauth", "manger");
+                    } else {
+                    }
+                  })
+                  .catch(err => {
+                    console.log(err);
+                  });
+              } else {
+                this.$Message.error('登录失败，检查密码')
+              }
             })
             .catch(err => {
               console.log(err);

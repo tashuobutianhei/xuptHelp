@@ -147,7 +147,7 @@ export default {
     ok() {
       // this.$emit("close");
       this.handleSubmit("formValidate");
-      this.$Message.info("Clicked ok");
+      // this.$Message.info("Clicked ok");
     },
     cancel() {
       this.$emit("close");

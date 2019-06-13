@@ -142,7 +142,7 @@ export default {
     },
     ok() {
       this.handleSubmit("formValidate");
-      this.$Message.info("Clicked ok");
+      // this.$Message.info("Clicked ok");
     },
     cancel() {
       this.$emit("close");

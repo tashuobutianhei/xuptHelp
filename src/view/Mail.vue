@@ -32,7 +32,7 @@
           <Col span="12" class="myget">
             <P>我的领取</P>
             <MailTask
-              v-for="item in mailTaskSelfList"
+              v-for="item in mailTaskOrderList"
               :key="item.taskId"
               class="mytask"
               type="order"
@@ -51,7 +51,7 @@
     </Tooltip>
 
     <Tooltip content="刷新" placement="top" class="refishbutton">
-      <Button shape="circle" icon="md-refresh" @click="refresh"></Button>
+      <Button shape="circle" icon="md-refresh" @click="refreshAll"></Button>
     </Tooltip>
 
     <Tooltip content="有什么要说的" placement="top" class="writebutton">
@@ -86,6 +86,10 @@ export default {
     };
   },
   methods: {
+    refreshAll(){
+      this.refresh();
+      this.refreshName()
+    },
     refresh() {
       this.axios({
         method: "get",
@@ -136,8 +140,7 @@ export default {
     }
   },
   created() {
-    this.refresh();
-    this.refreshName();
+    this.refreshAll()
   }
 };
 </script>

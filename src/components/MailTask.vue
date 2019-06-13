@@ -51,6 +51,7 @@
           v-if="type=='order' && status==0 "
           icon="md-flag"
           @click="getOrder"
+           :disabled="$store.state.userInfo.userName == mailInfo.pubUser"
         >马上接单</Button>
 
         <Poptip confirm title="确认收货了吗?" @on-ok="readyOrder" class="orderButton">
@@ -235,7 +236,7 @@ export default {
 .replay {
   position: absolute;
   bottom: 5px;
-  right: 5px;
+  right: 5px; 
 }
 .noneComment {
   text-align: center;

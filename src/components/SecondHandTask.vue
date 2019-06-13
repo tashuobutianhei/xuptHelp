@@ -15,8 +15,8 @@
     </Row>
     <Row class="conent" :gutter="8">
       <Col :md="style" :sm="24" :xs="24">
-        <div class="carousel">
-          <img class="img" :src="img">
+        <div class="carousel" :style="{height:rowStyle == 1 ? '100px' : '200px'}">
+          <img class="img" :src="img" :style="{height:rowStyle == 1 ? '100px' : '200px'}">
           <!-- <img class="img" src="../assets/img/5.jpg"> -->
         </div>
       </Col>
@@ -54,12 +54,13 @@
           v-if="type=='order' && status==0 "
           icon="md-flag"
           @click="getOrder"
+          :disabled="$store.state.userInfo.userName == Info.pubUser"
         >马上入手</Button>
 
         <!-- <Poptip confirm title="确认收货了吗?" @on-ok="readyOrder" class="orderButton">
           <Button type="warning" v-if="type=='order' && status==1 " icon="md-alarm">等待同意</Button>
         </Poptip>-->
-        <Poptip confirm title="快去送货?" @on-ok="getMyOrder" class="orderButton">
+        <Poptip confirm title="收到了吗" @on-ok="getMyOrder" class="orderButton">
           <Button type="primary" class="orderButton" v-if="type=='order' && status==1 ">确认收货</Button>
         </Poptip>
 
@@ -311,6 +312,7 @@ export default {
   background: #ffffff;
   border-radius: 5px;
   font-size: 14px;
+  /* height: 500PX; */
 }
 .conent {
   width: 90%;
@@ -366,6 +368,7 @@ export default {
 }
 .img {
   width: 100%;
+  /* height: 200px; */
 }
 .storeContent {
   height: 60px;
@@ -373,12 +376,12 @@ export default {
 }
 
 .carousel {
-  height: 100px;
+  /* height: 200px; */
   border: 1px red solid;
 }
 .carousel img {
   width: 100%;
-  max-height: 100px;
+  /* //max-height: 100px; */
 }
 </style>
 
